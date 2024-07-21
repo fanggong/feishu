@@ -13,8 +13,8 @@ LOCALE = 'Locale='
 
 APPLICATION_JSON = 'application/json'
 
-GET = "GET"
-POST = "POST"
+GET = 'GET'
+POST = 'POST'
 
 SERVER_TIMESTAMP_URL = '/api/v5/public/time'
 
