@@ -196,9 +196,7 @@ fabric.properties
 #
 result/
 .DS_Store
-tmp_update_buyer_open_id.py
-input/*
-output/*
 
 tmp*.py
 
+data/*
