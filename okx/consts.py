@@ -56,6 +56,8 @@ ACTIVSTE_OPTION = '/api/v5/account/activate-option'
 POSITION_BUILDER = '/api/v5/account/position-builder'
 GET_INSTRUMENTS = '/api/v5/account/instruments'
 
+BILLS_HISTORY_ARCHIVE = '/api/v5/account/bills-history-archive'
+
 # funding-complete-testcomplete
 NON_TRADABLE_ASSETS = '/api/v5/asset/non-tradable-assets'
 DEPOSIT_ADDRESS = '/api/v5/asset/deposit-address'

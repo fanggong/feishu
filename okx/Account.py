@@ -7,6 +7,20 @@ class AccountAPI(OkxClient):
     def __init__(self, api_key='-1', api_secret_key='-1', passphrase='-1', use_server_time=None, flag='1', domain = 'https://www.okx.com',debug = True,proxy = None):
         OkxClient.__init__(self, api_key, api_secret_key, passphrase, use_server_time, flag, domain, debug, proxy)
 
+    def apply_bills_archive(self, year, quarter):
+        params = {
+            'year': year,
+            'quarter': quarter
+        }
+        return self._request_with_params(POST, BILLS_HISTORY_ARCHIVE, params)
+
+    def get_bills_archive(self, year, quarter):
+        params = {
+            'year': year,
+            'quarter': quarter
+        }
+        return self._request_with_params(GET, BILLS_HISTORY_ARCHIVE, params)
+
     # Get Positions
     def get_position_risk(self, instType=''):
         params = {}
