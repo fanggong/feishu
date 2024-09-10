@@ -1,15 +1,16 @@
 import time
 import pandas as pd
-from .utils import *
+from script.utils import *
 
 
 def _get_bills_history(account_api, **kwargs):
     dat = account_api.get_account_bills_archive(**kwargs).get('data')
     time.sleep(0.4)
+    print(dat)
     if len(dat) == 0:
         return dat
     else:
-        kwargs['after'] = dat[-1]['billId']
+        kwargs['before'] = dat[0]['billId']
         dat = dat + _get_bills_history(account_api, **kwargs)
         return dat
 

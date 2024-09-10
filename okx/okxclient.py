@@ -24,6 +24,7 @@ class OkxClient(Client):
             warnings.warn("use_server_time parameter is deprecated. Please remove it.", DeprecationWarning)
 
     def _request(self, method, request_path, params):
+        print('------------------------------------------------------------------')
         if method == c.GET:
             request_path = request_path + utils.parse_params_to_str(params)
         timestamp = utils.get_timestamp()
@@ -36,9 +37,9 @@ class OkxClient(Client):
         else:
             header = utils.get_header_no_sign(self.flag, self.debug)
         response = None
-        if self.debug == True:
-            print('domain:',self.domain)
-            print('url:',request_path)
+        if self.debug:
+            print('domain:', self.domain)
+            print('url:', request_path)
         if method == c.GET:
             response = self.get(request_path, headers=header)
         elif method == c.POST:

@@ -1,6 +1,6 @@
 import time
 import pandas as pd
-from .utils import *
+from script.utils import *
 
 
 def _get_deposit_history(funding_api, **kwargs):

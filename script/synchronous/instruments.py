@@ -1,5 +1,5 @@
 import pandas as pd
-from .utils import *
+from script.utils import *
 
 
 def synchronous_instruments(conn, public_api, **kwargs):
