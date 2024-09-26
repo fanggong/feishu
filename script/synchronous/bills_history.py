@@ -6,7 +6,6 @@ from script.utils import *
 def _get_bills_history(account_api, **kwargs):
     dat = account_api.get_account_bills_archive(**kwargs).get('data')
     time.sleep(0.4)
-    print(dat)
     if len(dat) == 0:
         return dat
     else:
