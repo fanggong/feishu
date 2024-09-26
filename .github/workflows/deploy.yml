@@ -30,4 +30,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
+            conda activate feishu
+            conda env update --file environment.yml --prune
             cp /root/config.py /srv/feishu/config.py

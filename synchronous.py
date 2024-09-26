@@ -1,6 +1,6 @@
 from database.Mysql import MysqlEngine
 from config import *
-from script import *
+from funcs import *
 from okx.Trade import TradeAPI
 from okx.PublicData import PublicAPI
 from okx.Account import AccountAPI

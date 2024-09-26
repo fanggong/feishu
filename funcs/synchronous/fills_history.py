@@ -1,5 +1,5 @@
 import pandas as pd
-from script.utils import *
+from funcs.utils import *
 
 
 def _get_fills_history(trade_api, inst_type, **kwargs):

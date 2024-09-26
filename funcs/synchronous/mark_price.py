@@ -1,5 +1,5 @@
 import pandas as pd
-from script.utils import *
+from funcs.utils import *
 
 
 def synchronous_mark_price(conn, public_api, inst_type, **kwargs):
