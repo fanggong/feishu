@@ -13,12 +13,12 @@ jobs:
       - uses: actions/checkout@v2 
 
       - name: Deploy to Server
-        uses: tohn/rsync-deploy@main
+        uses: fanggong/rsync-deploy@main
         env:
           DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }} 
           ARGS: -avz --delete
           SERVER_PORT: "22"
-          FOLDER: .
+          FOLDER: ./
           SERVER_IP: ${{ secrets.SSH_HOST }} 
           USERNAME: ${{ secrets.SSH_USERNAME }} 
           SERVER_DESTINATION: /srv/feishu/
