@@ -23,6 +23,7 @@ if __name__ == '__main__':
     public_api = PublicAPI(api_key, secret_key, passphrase, False, '0')
     start_time = int(time.mktime(time.strptime('2024-07-01 00:00:00', '%Y-%m-%d %H:%M:%S'))*1000)
 
+
     for each in ['SPOT', 'SWAP', 'MARGIN']:
         synchronous_instruments(conn, public_api, instType=each)
 
