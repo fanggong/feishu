@@ -23,13 +23,14 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }} 
           SERVER_DESTINATION: /srv/feishu/
 
-      - name: Restart Nginx
+      - name: update environment
         uses: fanggong/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
+            cd /srv/feishu
             conda activate feishu
             conda env update --file environment.yml --prune
             cp /root/config.py /srv/feishu/config.py
