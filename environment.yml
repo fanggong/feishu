@@ -2,21 +2,21 @@ name: feishu
 channels:
   - defaults
 dependencies:
-#  - bzip2=1.0.8=h6c40b1e_6
-#  - ca-certificates=2024.3.11=hecd8cb5_0
-#  - libcxx=14.0.6=h9765a3e_0
-#  - libffi=3.3=hb1e8313_2
-#  - ncurses=6.4=hcec6c5f_0
-#  - openssl=1.1.1w=hca72f7f_0
-#  - pip=24.0=py310hecd8cb5_0
-#  - python=3.10.0=hdfd78df_5
-#  - readline=8.2=hca72f7f_0
-#  - setuptools=69.5.1=py310hecd8cb5_0
-#  - sqlite=3.45.3=h6c40b1e_0
-#  - tk=8.6.14=h4d00af3_0
-#  - wheel=0.43.0=py310hecd8cb5_0
-#  - xz=5.4.6=h6c40b1e_1
-#  - zlib=1.2.13=h4b97444_1
+  - bzip2=1.0.8
+  - ca-certificates=2024.3.11
+  - libcxx=14.0.6
+  - libffi=3.3
+  - ncurses=6.4
+  - openssl=1.1.1w
+  - pip=24.0
+  - python=3.10.0
+  - readline=8.2
+  - setuptools=69.5.1
+  - sqlite=3.45.3
+  - tk=8.6.14
+  - wheel=0.43.0
+  - xz=5.4.6
+  - zlib=1.2.13
   - pip:
     - anyio==4.4.0
     - appnope==0.1.4
@@ -31,9 +31,11 @@ dependencies:
     - backports-tarfile==1.2.0
     - beautifulsoup4==4.12.3
     - bleach==6.1.0
+    - blinker==1.8.2
     - certifi==2024.7.4
     - cffi==1.16.0
     - charset-normalizer==3.3.2
+    - click==8.1.7
     - comm==0.2.2
     - constantly==23.10.4
     - cryptography==42.0.8
@@ -43,6 +45,7 @@ dependencies:
     - exceptiongroup==1.2.1
     - executing==2.1.0
     - fastjsonschema==2.20.0
+    - flask==3.0.3
     - fqdn==1.5.1
     - greenlet==3.0.3
     - h11==0.14.0
@@ -59,6 +62,7 @@ dependencies:
     - ipython==8.27.0
     - ipywidgets==8.1.5
     - isoduration==20.11.0
+    - itsdangerous==2.2.0
     - jaraco-classes==3.4.0
     - jaraco-context==5.3.0
     - jaraco-functools==4.0.1
@@ -143,7 +147,9 @@ dependencies:
     - webencodings==0.5.1
     - websocket-client==1.8.0
     - websockets==12.0
+    - werkzeug==3.0.4
     - widgetsnbextension==4.0.13
     - zipp==3.19.2
     - zope-interface==6.4.post2
-prefix: /Users/fangyongchao/opt/miniconda3/envs/feishu
+#prefix: /Users/fangyongchao/opt/miniconda3/envs/feishu
+#conda env export --no-builds > environment.yml
