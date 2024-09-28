@@ -21,8 +21,16 @@ class MysqlEngine:
         return pd.read_sql(sql, self.engine)
 
     @retry(max_retries=3, delay=1)
-    def write_dat(self, dat, tbl_name, if_exists, index, schema):
-        dat.to_sql(tbl_name, self.engine, if_exists=if_exists, index=index, schema=schema)
+    def append_dat(self, dat, tbl_name, index, schema):
+        dat.to_sql(tbl_name, self.engine, if_exists='append', index=index, schema=schema)
+
+    @retry(max_retries=3, delay=1)
+    def replace_dat(self, dat, tbl_name, index=False, schema=None):
+        if schema:
+            self.run_sql(f'truncate table {schema}.{tbl_name}')
+        else:
+            self.run_sql(f'truncate table {tbl_name}')
+        dat.to_sql(tbl_name, self.engine, if_exists='append', index=index, schema=schema)
 
     @retry(max_retries=3, delay=1)
     def upsert_dat(self, dat, tbl_name):

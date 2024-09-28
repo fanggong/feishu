@@ -23,7 +23,7 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }} 
           SERVER_DESTINATION: /srv/feishu/
 
-      - name: update environment
+      - name: Update environment
         uses: fanggong/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -34,3 +34,5 @@ jobs:
             conda activate feishu
             conda env update --file environment.yml --prune
             cp /root/config.py /srv/feishu/config.py
+#            pkill -f main.py
+#            nohup python3 main.py > output.log 2>&1 &
