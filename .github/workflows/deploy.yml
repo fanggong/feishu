@@ -31,4 +31,5 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd /srv/feishu
+            chmod +x deploy.sh
             ./deploy.sh
