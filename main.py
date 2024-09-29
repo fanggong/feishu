@@ -3,6 +3,16 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 
+@app.route('/event', method=['POST'])
+def event():
+    print(request.json)
+    data = request.json
+
+    if data.get('type') == 'url_verification':
+        challenge = data.get('challenge')
+        return jsonify({'challenge': challenge}), 200
+
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     print(request.json)
