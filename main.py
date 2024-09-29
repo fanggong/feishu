@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify
+from quart import Quart, request, jsonify
 from utils import *
 from funcs import *
 import asyncio
 
-app = Flask(__name__)
+app = Quart(__name__)
 
 
 async def handle_crypto_update():
@@ -18,22 +18,22 @@ async def handle_crypto_report():
 
 @app.route('/event', methods=['POST'])
 def event():
-    data = request.json
+    data = await request.json
     if data['event']['event_key'] == 'crypto_update':
-        asyncio.create_task(handle_crypto_update())
+        await handle_crypto_update()
     elif data['event']['event_key'] == 'crypto_report':
-        asyncio.create_task(handle_crypto_report())
+        await handle_crypto_report()
     return jsonify({'message': 'Event received'}), 200
 
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    print(request.json)
-    data = request.json
-
-    if data.get('type') == 'url_verification':
-        challenge = data.get('challenge')
-        return jsonify({'challenge': challenge}), 200
+# @app.route('/webhook', methods=['POST'])
+# def webhook():
+#     print(request.json)
+#     data = request.get_json
+#
+#     if data.get('type') == 'url_verification':
+#         challenge = data.get('challenge')
+#         return jsonify({'challenge': challenge}), 200
 
 
 if __name__ == '__main__':
