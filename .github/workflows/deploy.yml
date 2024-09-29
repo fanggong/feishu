@@ -35,4 +35,4 @@ jobs:
             conda env update --file environment.yml --prune
             cp /root/config.py /srv/feishu/config.py
             chmod +x deploy.sh
-            ./deploy.sh
+#            ./deploy.sh

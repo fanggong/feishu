@@ -11,7 +11,7 @@ def event():
 
     if data.event['event_key'] == 'crypto_update':
         send_text_msg_to_myself(f'[LongQi] [{now()}] 已接收到数据更新请求')
-        await synchronous_withdraw_history(conn=conn, funding_api=funding_api)
+        synchronous_withdraw_history(conn=conn, funding_api=funding_api)
         send_text_msg_to_myself(f'[LongQi] [{now()}] 数据更新成功')
     elif data.event['event_key'] == 'crypto_report':
         send_text_msg_to_myself(f'[LongQi] [{now()}] 已接收到数据报告请求')
