@@ -8,7 +8,7 @@ app = Quart(__name__)
 
 async def handle_crypto_update():
     send_text_msg_to_myself(f'[LongQi] [{now()}] 已接收到数据更新请求')
-    await synchronous_withdraw_history(conn=conn, funding_api=funding_api)
+    synchronous_withdraw_history(conn=conn, funding_api=funding_api)
     send_text_msg_to_myself(f'[LongQi] [{now()}] 数据更新成功')
 
 
@@ -18,11 +18,12 @@ async def handle_crypto_report():
 
 @app.route('/event', methods=['POST'])
 async def event():
-    data = await request.get_json()
-    if data['event']['event_key'] == 'crypto_update':
-        await handle_crypto_update()
-    elif data['event']['event_key'] == 'crypto_report':
-        await handle_crypto_report()
+    # data = await request.get_json()
+    await handle_crypto_update()
+    # if data['event']['event_key'] == 'crypto_update':
+    #     await handle_crypto_update()
+    # elif data['event']['event_key'] == 'crypto_report':
+    #     await handle_crypto_report()
     return jsonify({'message': 'Event received'}), 200
 
 
