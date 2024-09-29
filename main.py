@@ -8,7 +8,7 @@ app = Quart(__name__)
 
 async def handle_crypto_update():
     send_text_msg_to_myself(f'[LongQi] [{now()}] 已接收到数据更新请求')
-    synchronous_withdraw_history(conn=conn, funding_api=funding_api)
+    await synchronous_withdraw_history(conn=conn, funding_api=funding_api)
     send_text_msg_to_myself(f'[LongQi] [{now()}] 数据更新成功')
 
 
