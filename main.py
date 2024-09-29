@@ -1,9 +1,9 @@
-from quart import Quart, request, jsonify
+from flask import Flask, request, jsonify
 from utils import *
 from funcs import *
 import asyncio
 
-app = Quart(__name__)
+app = Flask(__name__)
 
 
 async def handle_crypto_update():
@@ -17,7 +17,7 @@ async def handle_crypto_report():
 
 
 @app.route('/event', methods=['POST'])
-def event():
+async def event():
     print(request.json)
     data = request.json
     if data['event']['event_key'] == 'crypto_update':
