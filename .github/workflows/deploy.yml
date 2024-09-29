@@ -31,8 +31,8 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd /srv/feishu
-#            conda activate feishu
-#            conda env update --file environment.yml --prune
+            conda activate feishu
+            conda env update --file environment.yml --prune
             cp /root/config.py /srv/feishu/config.py
-#            chmod +x deploy.sh
-#            ./deploy.sh
+            chmod +x deploy.sh
+            ./deploy.sh
