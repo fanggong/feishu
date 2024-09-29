@@ -17,20 +17,20 @@ async def handle_crypto_report():
 
 
 @app.route('/event', methods=['POST'])
-async def event():
-    # data = await request.get_json()
-    await handle_crypto_update()
-    # if data['event']['event_key'] == 'crypto_update':
-    #     await handle_crypto_update()
-    # elif data['event']['event_key'] == 'crypto_report':
-    #     await handle_crypto_report()
+def event():
+    print(request.json)
+    data = request.json
+    if data['event']['event_key'] == 'crypto_update':
+        asyncio.create_task(handle_crypto_update())
+    elif data['event']['event_key'] == 'crypto_report':
+        asyncio.create_task(handle_crypto_report())
     return jsonify({'message': 'Event received'}), 200
 
 
 # @app.route('/webhook', methods=['POST'])
 # def webhook():
 #     print(request.json)
-#     data = request.get_json
+#     data = request.json
 #
 #     if data.get('type') == 'url_verification':
 #         challenge = data.get('challenge')
