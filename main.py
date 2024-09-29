@@ -17,7 +17,7 @@ async def handle_crypto_report():
 
 
 @app.route('/event', methods=['POST'])
-def event():
+async def event():
     data = await request.get_json()
     if data['event']['event_key'] == 'crypto_update':
         await handle_crypto_update()
