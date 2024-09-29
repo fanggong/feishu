@@ -1,9 +1,9 @@
-from quart import Quart, request, jsonify
+from flask import Flask, request, jsonify
 from utils import *
 from funcs import *
 import asyncio
 
-app = Quart(__name__)
+app = Flask(__name__)
 
 
 async def handle_crypto_update():
@@ -38,5 +38,8 @@ def event():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=11066)
-
+    loop = asyncio.get_event_loop()  # 获取当前事件循环
+    if loop.is_running():
+        app.run(host='0.0.0.0', port=11066)
+    else:
+        asyncio.run(app.run(host='0.0.0.0', port=11066))
