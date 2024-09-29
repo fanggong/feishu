@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify
+from quart import Quart, request, jsonify
 from utils import *
 from funcs import *
 import asyncio
 
-app = Flask(__name__)
+app = Quart(__name__)
 
 
 async def handle_crypto_update():
