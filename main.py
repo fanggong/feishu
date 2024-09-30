@@ -13,7 +13,21 @@ async def run_in_back(sync_func):
 
 def handle_crypto_update():
     s = f = 0
+    start_time = get_quarter_firstday(datetime.datetime.now())
+    start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
+
     send_text_msg_to_myself(f'[LongQi] [{now()}] 开始数据更新任务，任务开始')
+
+    # bill history
+    mission = 'BILLS HISTORY'
+    try:
+        synchronous_bills_history(conn=conn, account_api=account_api, begin=start_time)
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
+        s = s + 1
+    except BaseException as e:
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
+        f = f + 1
+
     # instruments
     mission = 'INSTRUMENTS'
     try:
@@ -28,7 +42,8 @@ def handle_crypto_update():
     # mark price
     mission = 'MARK PRICE'
     try:
-        synchronous_mark_price(conn=conn, public_api=public_api, inst_type='MARGIN')
+        for each in ['SPOT', 'SWAP', 'MARGIN']:
+            synchronous_mark_price(conn=conn, public_api=public_api, inst_type=each)
         send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
         s = s + 1
     except BaseException as e:
@@ -39,6 +54,26 @@ def handle_crypto_update():
     mission = 'POSITIONS'
     try:
         synchronous_positions(conn=conn, account_api=account_api)
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
+        s = s + 1
+    except BaseException as e:
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
+        f = f + 1
+
+    # positions
+    mission = 'WITHDRAW HISTORY'
+    try:
+        synchronous_withdraw_history(conn=conn, funding_api=funding_api)
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
+        s = s + 1
+    except BaseException as e:
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
+        f = f + 1
+
+    # positions
+    mission = 'DEPOSIT HISTORY'
+    try:
+        synchronous_deposit_history(conn=conn, funding_api=funding_api)
         send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
         s = s + 1
     except BaseException as e:

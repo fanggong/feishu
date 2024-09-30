@@ -36,3 +36,15 @@ def send_text_msg_to_myself(content):
 
 def now():
     return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+
+def get_quarter_firstday(dt: datetime.datetime):
+    month = dt.month
+    month = month - (month - 1) % 3
+    dt = dt.replace(month=month, day=1, hour=0, minute=0, second=0, microsecond=0)
+    return dt.strftime('%Y-%m-%d %H:%M:%S')
+
+
+if __name__ == '__main__':
+    tmp = get_quarter_firstday(datetime.datetime.now())
+    print(tmp)
