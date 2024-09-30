@@ -30,4 +30,5 @@ if __name__ == '__main__':
     synchronous_bills_history(conn=conn, account_api=account_api, begin=start_time)
     synchronous_withdraw_history(conn=conn, funding_api=funding_api)
     synchronous_deposit_history(conn=conn, funding_api=funding_api)
+    synchronous_positions(conn=conn, account_api=account_api)
 

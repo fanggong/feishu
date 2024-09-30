@@ -12,16 +12,40 @@ async def run_in_back(sync_func):
 
 
 def handle_crypto_update():
-    send_text_msg_to_myself(f'---------------------Data Update Mission------------------------------')
-    send_text_msg_to_myself(f'| [LongQi] [{now()}] DATA UPDATE MISSION RECEIVED        |')
+    s = f = 0
+    send_text_msg_to_myself(f'[LongQi] [{now()}] 开始数据更新任务，任务开始')
+    # instruments
+    mission = 'INSTRUMENTS'
     try:
         for each in ['SPOT', 'SWAP', 'MARGIN']:
             synchronous_instruments(conn, public_api, instType=each)
-        send_text_msg_to_myself(f'| [LongQi] [{now()}] INSTRUMENTS UPDATE SUCCESS          |')
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
+        s = s + 1
     except BaseException as e:
-        send_text_msg_to_myself(f'| [LongQi] [{now()}] INSTRUMENTS UPDATE FAIL             |')
-    send_text_msg_to_myself(f'| [LongQi] [{now()}] DATA UPDATE MISSION COMPLETED       |')
-    send_text_msg_to_myself(f'----------------------------------------------------------------------')
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
+        f = f + 1
+
+    # mark price
+    mission = 'MARK PRICE'
+    try:
+        synchronous_mark_price(conn=conn, public_api=public_api, inst_type='MARGIN')
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
+        s = s + 1
+    except BaseException as e:
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
+        f = f + 1
+
+    # positions
+    mission = 'POSITIONS'
+    try:
+        synchronous_positions(conn=conn, account_api=account_api)
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
+        s = s + 1
+    except BaseException as e:
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
+        f = f + 1
+
+    send_text_msg_to_myself(f'[LongQi] [{now()}] 结束数据更新任务，共计{s+f}项任务，成功{s}项，失败{f}项')
 
 
 def handle_crypto_report():
