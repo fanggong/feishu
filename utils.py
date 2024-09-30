@@ -10,6 +10,7 @@ from okx.Funding import FundingAPI
 from okx.PublicData import PublicAPI
 from okx.MarketData import MarketAPI
 from feishu.FeishuAppRobot import FeishuAppRobot
+from funcs import *
 
 
 app_id = FEISHU_CONFIG['LongQi']['app_id']
@@ -49,10 +50,4 @@ def get_quarter_firstday(dt: datetime.datetime):
 
 
 if __name__ == '__main__':
-    columns = {
-        'usdCny': 'usd_cny'
-    }
-    dat = market_api.get_exchange_rate()['data']
-    dat = pd.DataFrame(dat)
-    dat = dat[columns.keys()]
-    dat = dat.rename(columns=columns)
+    synchronous_balance(conn=conn, account_api=account_api)

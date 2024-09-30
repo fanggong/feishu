@@ -1,6 +1,5 @@
 from quart import Quart, request, jsonify
 from utils import *
-from funcs import *
 import asyncio
 
 app = Quart(__name__)
@@ -17,6 +16,17 @@ def handle_crypto_update():
     start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
 
     send_text_msg_to_myself(f'[LongQi] [{now()}] 开始数据更新任务，任务开始')
+
+    # bill history
+    mission = 'BALANCE'
+    try:
+        synchronous_balance(conn=conn, account_api=account_api)
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
+        s = s + 1
+    except BaseException as e:
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
+        f = f + 1
+
 
     # bill history
     mission = 'BILLS HISTORY'
