@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify
+from quart import Quart, request, jsonify
 from utils import *
 from funcs import *
 import asyncio
 
-app = Flask(__name__)
+app = Quart(__name__)
 
 
 async def run_in_back(sync_func, **kwargs):
@@ -43,6 +43,6 @@ def event():
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=11066)
+    app.run(host='0.0.0.0', port=11066)
 
 
