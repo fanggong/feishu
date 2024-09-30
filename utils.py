@@ -1,12 +1,14 @@
 import datetime
 import lark_oapi as lark
 import time
+import pandas as od
 from config import *
 from database.Mysql import MysqlEngine
 from okx.Trade import TradeAPI
 from okx.Account import AccountAPI
 from okx.Funding import FundingAPI
 from okx.PublicData import PublicAPI
+from okx.MarketData import MarketAPI
 from feishu.FeishuAppRobot import FeishuAppRobot
 
 
@@ -26,6 +28,7 @@ trade_api = TradeAPI(api_key, secret_key, passphrase, False, '0')
 account_api = AccountAPI(api_key, secret_key, passphrase, False, '0')
 funding_api = FundingAPI(api_key, secret_key, passphrase, False, '0')
 public_api = PublicAPI(api_key, secret_key, passphrase, False, '0')
+market_api = MarketAPI(api_key, secret_key, passphrase, False, '0')
 feishu_app_robot = FeishuAppRobot(app_id=app_id, app_secret=app_secret)
 
 
@@ -46,5 +49,10 @@ def get_quarter_firstday(dt: datetime.datetime):
 
 
 if __name__ == '__main__':
-    tmp = get_quarter_firstday(datetime.datetime.now())
-    print(tmp)
+    columns = {
+        'usdCny': 'usd_cny'
+    }
+    dat = market_api.get_exchange_rate()['data']
+    dat = pd.DataFrame(dat)
+    dat = dat[columns.keys()]
+    dat = dat.rename(columns=columns)

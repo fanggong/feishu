@@ -80,6 +80,16 @@ def handle_crypto_update():
         send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
         f = f + 1
 
+    # exchange rate
+    mission = 'EXCHANGE RATE'
+    try:
+        synchronous_exchange_rate(conn=conn, market_api=market_api)
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
+        s = s + 1
+    except BaseException as e:
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
+        f = f + 1
+
     send_text_msg_to_myself(f'[LongQi] [{now()}] 结束数据更新任务，共计{s+f}项任务，成功{s}项，失败{f}项')
 
 
