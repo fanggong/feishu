@@ -6,13 +6,18 @@ import asyncio
 app = Flask(__name__)
 
 
-async def handle_crypto_update():
+async def run_in_back(sync_func, **kwargs):
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(None, sync_func, kwargs)
+
+
+def handle_crypto_update():
     send_text_msg_to_myself(f'[LongQi] [{now()}] 已接收到数据更新请求')
     synchronous_withdraw_history(conn=conn, funding_api=funding_api)
     send_text_msg_to_myself(f'[LongQi] [{now()}] 数据更新成功')
 
 
-async def handle_crypto_report():
+def handle_crypto_report():
     send_text_msg_to_myself(f'[LongQi] [{now()}] 已接收到数据报告请求')
 
 
@@ -21,9 +26,9 @@ def event():
     print(request.json)
     data = request.json
     if data['event']['event_key'] == 'crypto_update':
-        asyncio.create_task(handle_crypto_update())
+        asyncio.create_task(run_in_back(handle_crypto_update))
     elif data['event']['event_key'] == 'crypto_report':
-        asyncio.create_task(handle_crypto_report())
+        asyncio.create_task(run_in_back(handle_crypto_report))
     return jsonify({'message': 'Event received'}), 200
 
 
@@ -38,9 +43,6 @@ def event():
 
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()  # 获取当前事件循环
-    if loop.is_running():
-        app.run(host='0.0.0.0', port=11066)
-    else:
-        asyncio.run(app.run(host='0.0.0.0', port=11066))
+    app.run(host='localhost', port=11066)
+
 
