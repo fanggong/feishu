@@ -42,7 +42,7 @@ def handle_crypto_update():
     # mark price
     mission = 'MARK PRICE'
     try:
-        for each in ['SPOT', 'SWAP', 'MARGIN']:
+        for each in ['SWAP', 'MARGIN']:
             synchronous_mark_price(conn=conn, public_api=public_api, inst_type=each)
         send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
         s = s + 1
