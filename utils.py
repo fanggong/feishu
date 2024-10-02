@@ -64,6 +64,11 @@ def get_quarter_firstday(dt: datetime.datetime):
     return dt.strftime('%Y-%m-%d %H:%M:%S')
 
 
+def get_yesterday(dt: datetime.datetime):
+    dt = dt - datetime.timedelta(days=1)
+    return dt.strftime('%Y-%m-%d %H:%M:%S')
+
+
 def update_log(conn: MysqlEngine, s, f):
     dat = pd.DataFrame({
         'update_at': [now()],

@@ -30,7 +30,7 @@ def run_update_task(mission, task_func, *args, **kwargs):
 
 def handle_crypto_update():
     s = f = 0
-    start_time = get_quarter_firstday(datetime.datetime.now())
+    start_time = get_yesterday(datetime.datetime.now())
     start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
 
     send_text_msg_to_myself(f'[LongQi] [{now()}] 开始数据更新任务')
