@@ -7,3 +7,5 @@ from funcs.synchronous.mark_price import synchronous_mark_price
 from funcs.synchronous.positions import synchronous_positions
 from funcs.synchronous.exchange_rate import synchronous_exchange_rate
 from funcs.synchronous.balance import synchronous_balance
+
+from funcs.datapush.crypto_report import datapush_crypto_report

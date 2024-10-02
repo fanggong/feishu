@@ -38,6 +38,19 @@ def send_text_msg_to_myself(content):
     feishu_app_robot.send_msg(receive_id=OPEN_ID['Fang Yongchao'], msg_type='text', content=content)
 
 
+def send_interactive_card_to_my_self(template_variable, template_id, template_version_name):
+    content = {
+        'type': 'template',
+        'data': {
+            'template_id': template_id,
+            'template_version_name': template_version_name,
+            'template_variable': template_variable
+        }
+    }
+    content = lark.JSON.marshal(content)
+    feishu_app_robot.send_msg(receive_id=OPEN_ID['Fang Yongchao'], msg_type='interactive', content=content)
+
+
 def now():
     return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -50,4 +63,8 @@ def get_quarter_firstday(dt: datetime.datetime):
 
 
 if __name__ == '__main__':
-    synchronous_balance(conn=conn, account_api=account_api)
+    send_interactive_card_to_my_self(
+        template_variable=datapush_crypto_report(conn=conn),
+        template_id=INTERACTIVE_CARD['crypto_report']['id'],
+        template_version_name=INTERACTIVE_CARD['crypto_report']['version_name']
+    )

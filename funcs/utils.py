@@ -7,3 +7,13 @@ def from_timestamp(x):
     except BaseException:
         result = None
     return result
+
+
+def format_number(value, decimals):
+    # 使用格式化字符串指定小数位数，格式化为指定的小数位数
+    format_str = f"{{:.{decimals}f}}"
+    return format_str.format(value)
+
+
+if __name__ == '__main__':
+    print(format_number(3.2, 6))
