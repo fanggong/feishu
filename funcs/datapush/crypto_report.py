@@ -164,12 +164,12 @@ def datapush_crypto_report(conn: MysqlEngine):
     '''
     contract_flow = conn.fetch_dat(sql)
 
-
     total_asset = asset.value.sum()
     position_asset = total_asset + derivative_asset.value.sum()
 
-    asset_format = asset[['ccy', 'eq']].rename(columns={'eq': 'amt'})
+    asset_format = asset.rename(columns={'eq': 'amt'})
     asset_format['amt'] = asset_format['amt'].apply(lambda x: format_number(x, 6))
+    asset_format['value'] = asset_format['value'].apply(lambda x: format_number(x, 6))
     asset_format = asset_format.to_dict(orient='records')
 
     res = {
