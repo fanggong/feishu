@@ -26,14 +26,11 @@ if __name__ == '__main__':
     start_time = int(time.mktime(time.strptime('2024-07-01 00:00:00', '%Y-%m-%d %H:%M:%S'))*1000)
 
     synchronous_exchange_rate(conn=conn, market_api=market_api)
-
-
-    # for each in ['SPOT', 'SWAP', 'MARGIN']:
-    #     synchronous_instruments(conn, public_api, instType=each)
-    #
-    # synchronous_mark_price(conn=conn, public_api=public_api, inst_type='MARGIN')
-    # synchronous_bills_history(conn=conn, account_api=account_api, begin=start_time)
-    # synchronous_withdraw_history(conn=conn, funding_api=funding_api)
-    # synchronous_deposit_history(conn=conn, funding_api=funding_api)
-    # synchronous_positions(conn=conn, account_api=account_api)
+    for each in ['SPOT', 'SWAP', 'MARGIN']:
+        synchronous_instruments(conn, public_api, instType=each)
+    synchronous_mark_price(conn=conn, public_api=public_api, inst_type='MARGIN')
+    synchronous_bills_history(conn=conn, account_api=account_api, begin=start_time)
+    synchronous_withdraw_history(conn=conn, funding_api=funding_api)
+    synchronous_deposit_history(conn=conn, funding_api=funding_api)
+    synchronous_positions(conn=conn, account_api=account_api)
 

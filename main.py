@@ -10,6 +10,24 @@ async def run_in_back(sync_func):
     return await loop.run_in_executor(None, sync_func)
 
 
+def run_update_task(mission, task_func, *args, **kwargs):
+    """
+    运行任务的通用函数，处理 try-except 逻辑，并发送消息
+    :param mission: 任务名称
+    :param task_func: 要执行的任务函数
+    :param args: 任务函数的参数
+    :param kwargs: 任务函数的关键字参数
+    :return: 成功为 1，失败为 0
+    """
+    try:
+        task_func(*args, **kwargs)
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
+        return 1  # 成功
+    except BaseException as e:
+        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
+        return 0  # 失败
+
+
 def handle_crypto_update():
     s = f = 0
     start_time = get_quarter_firstday(datetime.datetime.now())
@@ -17,90 +35,28 @@ def handle_crypto_update():
 
     send_text_msg_to_myself(f'[LongQi] [{now()}] 开始数据更新任务')
 
-    # bill history
-    mission = 'BALANCE'
-    try:
-        synchronous_balance(conn=conn, account_api=account_api)
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
-        s = s + 1
-    except BaseException as e:
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
-        f = f + 1
+    # 任务列表：任务名称和对应函数
+    tasks = [
+        ('BALANCE', synchronous_balance, {'conn': conn, 'account_api': account_api}),
+        ('BILLS HISTORY', synchronous_bills_history, {'conn': conn, 'account_api': account_api, 'begin': start_time}),
+        ('INSTRUMENTS', synchronous_instruments, {'conn': conn, 'public_api': public_api, 'instType': 'SPOT'}),
+        ('INSTRUMENTS', synchronous_instruments, {'conn': conn, 'public_api': public_api, 'instType': 'SWAP'}),
+        ('INSTRUMENTS', synchronous_instruments, {'conn': conn, 'public_api': public_api, 'instType': 'MARGIN'}),
+        ('MARK PRICE', synchronous_mark_price, {'conn': conn, 'public_api': public_api, 'inst_type': 'SWAP'}),
+        ('MARK PRICE', synchronous_mark_price, {'conn': conn, 'public_api': public_api, 'inst_type': 'MARGIN'}),
+        ('POSITIONS', synchronous_positions, {'conn': conn, 'account_api': account_api}),
+        ('WITHDRAW HISTORY', synchronous_withdraw_history, {'conn': conn, 'funding_api': funding_api}),
+        ('DEPOSIT HISTORY', synchronous_deposit_history, {'conn': conn, 'funding_api': funding_api}),
+        ('EXCHANGE RATE', synchronous_exchange_rate, {'conn': conn, 'market_api': market_api}),
+    ]
 
+    # 执行任务
+    for mission, func, func_args in tasks:
+        result = run_update_task(mission, func, **func_args)
+        s += result
+        f += (1 - result)  # 如果任务失败，增加 f 计数
 
-    # bill history
-    mission = 'BILLS HISTORY'
-    try:
-        synchronous_bills_history(conn=conn, account_api=account_api, begin=start_time)
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
-        s = s + 1
-    except BaseException as e:
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
-        f = f + 1
-
-    # instruments
-    mission = 'INSTRUMENTS'
-    try:
-        for each in ['SPOT', 'SWAP', 'MARGIN']:
-            synchronous_instruments(conn, public_api, instType=each)
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
-        s = s + 1
-    except BaseException as e:
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
-        f = f + 1
-
-    # mark price
-    mission = 'MARK PRICE'
-    try:
-        for each in ['SWAP', 'MARGIN']:
-            synchronous_mark_price(conn=conn, public_api=public_api, inst_type=each)
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
-        s = s + 1
-    except BaseException as e:
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
-        f = f + 1
-
-    # positions
-    mission = 'POSITIONS'
-    try:
-        synchronous_positions(conn=conn, account_api=account_api)
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
-        s = s + 1
-    except BaseException as e:
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
-        f = f + 1
-
-    # positions
-    mission = 'WITHDRAW HISTORY'
-    try:
-        synchronous_withdraw_history(conn=conn, funding_api=funding_api)
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
-        s = s + 1
-    except BaseException as e:
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
-        f = f + 1
-
-    # positions
-    mission = 'DEPOSIT HISTORY'
-    try:
-        synchronous_deposit_history(conn=conn, funding_api=funding_api)
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
-        s = s + 1
-    except BaseException as e:
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
-        f = f + 1
-
-    # exchange rate
-    mission = 'EXCHANGE RATE'
-    try:
-        synchronous_exchange_rate(conn=conn, market_api=market_api)
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
-        s = s + 1
-    except BaseException as e:
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
-        f = f + 1
-
-    send_text_msg_to_myself(f'[LongQi] [{now()}] 结束数据更新任务，共计{s+f}项任务，成功{s}项，失败{f}项')
+    send_text_msg_to_myself(f'[LongQi] [{now()}] 结束数据更新任务，共计{s + f}项任务，成功{s}项，失败{f}项')
 
 
 def handle_crypto_report():
