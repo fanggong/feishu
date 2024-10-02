@@ -2,6 +2,8 @@ import datetime
 import lark_oapi as lark
 import time
 import pandas as od
+import pandas as pd
+
 from config import *
 from database.Mysql import MysqlEngine
 from okx.Trade import TradeAPI
@@ -60,6 +62,16 @@ def get_quarter_firstday(dt: datetime.datetime):
     month = month - (month - 1) % 3
     dt = dt.replace(month=month, day=1, hour=0, minute=0, second=0, microsecond=0)
     return dt.strftime('%Y-%m-%d %H:%M:%S')
+
+
+def update_log(conn: MysqlEngine, s, f):
+    dat = pd.DataFrame({
+        'update_at': [now()],
+        'num_all': [s + f],
+        'num_success': [s],
+        'num_fail': [f]
+    })
+    conn.append_dat(dat=dat, tbl_name='update_log')
 
 
 if __name__ == '__main__':

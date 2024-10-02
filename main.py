@@ -58,6 +58,8 @@ def handle_crypto_update():
 
     send_text_msg_to_myself(f'[LongQi] [{now()}] 结束数据更新任务，共计{s + f}项任务，成功{s}项，失败{f}项')
 
+    update_log(conn=conn, s=s, f=f)
+
 
 def handle_crypto_report():
     send_text_msg_to_myself(f'[LongQi] [{now()}] 开始数据报告生成')

@@ -21,7 +21,7 @@ class MysqlEngine:
         return pd.read_sql(sql, self.engine)
 
     @retry(max_retries=3, delay=1)
-    def append_dat(self, dat, tbl_name, index, schema):
+    def append_dat(self, dat, tbl_name, index=False, schema=None):
         dat.to_sql(tbl_name, self.engine, if_exists='append', index=index, schema=schema)
 
     @retry(max_retries=3, delay=1)

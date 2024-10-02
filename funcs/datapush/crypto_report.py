@@ -164,6 +164,12 @@ def datapush_crypto_report(conn: MysqlEngine):
     '''
     contract_flow = conn.fetch_dat(sql)
 
+    sql = f'''
+    select max(update_at) update_at
+    from update_log
+    '''
+    update_at = conn.fetch_dat(sql).update_at[0].strftime('%Y-%m-%d %H:%M:%S')
+
     total_asset = asset.value.sum()
     position_asset = total_asset + derivative_asset.value.sum()
 
@@ -182,6 +188,7 @@ def datapush_crypto_report(conn: MysqlEngine):
         'contract_flow': format_number(contract_flow.margin.sum(), 2),
         'margin_flow': format_number(margin_flow.imr_usdt.sum(), 2),
         'free_flow': format_number(total_asset - contract_flow.margin.sum() - margin_flow.imr_usdt.sum(), 2),
+        'update_at': update_at,
         'asset': asset_format
     }
     return res
