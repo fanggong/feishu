@@ -62,7 +62,7 @@ def handle_crypto_update():
 
 
 def handle_crypto_report():
-    send_text_msg_to_myself(f'[LongQi] [{now()}] 开始数据报告生成')
+    send_text_msg_to_myself(f'[LongQi] [{now()}] 开始报告生成')
     send_interactive_card_to_my_self(
         template_variable=datapush_crypto_report(conn=conn),
         template_id=INTERACTIVE_CARD['crypto_report']['id'],

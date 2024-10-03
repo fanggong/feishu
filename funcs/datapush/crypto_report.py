@@ -1,13 +1,14 @@
 
 from database.Mysql import MysqlEngine
 from funcs.utils import *
+import pandas as pd
 
 
 def datapush_crypto_report(conn: MysqlEngine):
     sql = f'''
     select 
         src.ccy ccy
-        ,eq
+        ,eq amt
         ,eq * coalesce(mark_px, 1) value
     from (
         select ccy, eq  
@@ -173,7 +174,7 @@ def datapush_crypto_report(conn: MysqlEngine):
     total_asset = asset.value.sum()
     position_asset = total_asset + derivative_asset.value.sum()
 
-    asset_format = asset.rename(columns={'eq': 'amt'})
+    asset_format = pd.concat([asset, derivative_asset]).groupby('ccy').sum().reset_index().sort_values('value', ascending=False)
     asset_format['amt'] = asset_format['amt'].apply(lambda x: format_number(x, 6))
     asset_format['value'] = asset_format['value'].apply(lambda x: format_number(x, 6))
     asset_format = asset_format.to_dict(orient='records')
@@ -192,3 +193,7 @@ def datapush_crypto_report(conn: MysqlEngine):
         'asset': asset_format
     }
     return res
+
+
+# def datapush_risk_report(conn: MysqlEngine):
+#     sql =
