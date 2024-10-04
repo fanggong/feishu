@@ -21,10 +21,10 @@ def run_update_task(mission, task_func, *args, **kwargs):
     """
     try:
         task_func(*args, **kwargs)
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新成功')
+        send_text_msg_to_myself(f'[LongQi] [{now()}] Data update for Table {mission} succeeded.')
         return 1  # 成功
     except BaseException as e:
-        send_text_msg_to_myself(f'[LongQi] [{now()}] {mission} 数据更新失败，报错信息如下：{str(e)}')
+        send_text_msg_to_myself(f'[LongQi] [{now()}] Data update for Table {mission} failed. Reason for failure:：{str(e)}')
         return 0  # 失败
 
 
@@ -33,7 +33,7 @@ def handle_crypto_update():
     start_time = get_yesterday(datetime.datetime.now())
     start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
 
-    send_text_msg_to_myself(f'[LongQi] [{now()}] 开始数据更新任务')
+    send_text_msg_to_myself(f'[LongQi] [{now()}] Starting data update')
 
     # 任务列表：任务名称和对应函数
     tasks = [
@@ -56,7 +56,7 @@ def handle_crypto_update():
         s += result
         f += (1 - result)  # 如果任务失败，增加 f 计数
 
-    send_text_msg_to_myself(f'[LongQi] [{now()}] 结束数据更新任务，共计{s + f}项任务，成功{s}项，失败{f}项')
+    send_text_msg_to_myself(f'[LongQi] [{now()}] Data update completed. A total of {f + s} tasks were executed, with {s} successful and {f} failed.')
 
     update_log(conn=conn, s=s, f=f)
 
