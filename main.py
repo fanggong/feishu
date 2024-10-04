@@ -82,12 +82,21 @@ def handle_risk_report():
 @app.route('/event', methods=['POST'])
 async def event():
     data = await request.get_json()
-    if data['event']['event_key'] == 'crypto_update':
-        asyncio.create_task(run_in_back(handle_crypto_update))
-    elif data['event']['event_key'] == 'crypto_report':
-        asyncio.create_task(run_in_back(handle_crypto_report))
-    elif data['event']['event_key'] == 'risk_report':
-        asyncio.create_task(run_in_back(handle_risk_report()))
+    tasks = {
+        'crypto_update': handle_crypto_update,
+        'crypto_report': handle_crypto_report,
+        'risk_report': handle_risk_report
+    }
+    if tasks.get(data['event']['event_key']):
+        asyncio.create_task(run_in_back(tasks.get(data['event']['event_key'])))
+
+    # if data['event']['event_key'] == 'crypto_update':
+    #     asyncio.create_task(run_in_back(handle_crypto_update))
+    # elif data['event']['event_key'] == 'crypto_report':
+    #     asyncio.create_task(run_in_back(handle_crypto_report))
+    # elif data['event']['event_key'] == 'risk_report':
+    #     asyncio.create_task(run_in_back(handle_risk_report()))
+
     return jsonify({'message': 'Event received'}), 200
 
 
