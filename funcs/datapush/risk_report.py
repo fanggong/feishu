@@ -35,12 +35,12 @@ def datapush_risk_report(conn: MysqlEngine):
     sql = f'''
     select 
         concat(src.ccy, '(', lever, ')') ccy
-        ,margin
-        ,margin / (margin + eq * mark_px) * 100 liability_ratio
+        ,eq * mark_px margin
+        ,liab / (liab + eq * mark_px) * 100 liability_ratio
     from (
         select
             regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
-            ,-liab margin
+            ,-liab liab
             ,round(lever, 0) lever
         from positions p 
         where inst_type = 'MARGIN'
