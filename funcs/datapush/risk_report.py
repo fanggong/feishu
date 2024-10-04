@@ -74,5 +74,4 @@ def datapush_risk_report(conn: MysqlEngine):
         'margin': margin.to_dict(orient='records'),
         'update_at': update_at
     }
-
     return res
