@@ -15,7 +15,7 @@ from feishu.FeishuAppRobot import FeishuAppRobot
 from funcs import *
 
 INTERACTIVE_CARD = {
-    'crypto_report': {'id': 'AAq7F02QhXIfo', 'version_name': '1.0.8'},
+    'crypto_report': {'id': 'AAq7F02QhXIfo', 'version_name': '1.0.9'},
     'risk_report': {'id': 'AAq7xvyDvK3WX', 'version_name': '1.0.3'}
 }
 
@@ -84,8 +84,6 @@ def update_log(conn: MysqlEngine, s, f):
 
 
 if __name__ == '__main__':
-    send_interactive_card_to_my_self(
-        template_variable=datapush_risk_report(conn=conn),
-        template_id=INTERACTIVE_CARD['crypto_report']['id'],
-        template_version_name=INTERACTIVE_CARD['crypto_report']['version_name']
+    synchronous_balance_on_chain(
+        conn=conn, api_key=MORALIS_CONFIG['api_key'], params_dict=ADDRESS
     )

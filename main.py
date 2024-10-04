@@ -11,14 +11,6 @@ async def run_in_back(sync_func):
 
 
 def run_update_task(mission, task_func, *args, **kwargs):
-    """
-    运行任务的通用函数，处理 try-except 逻辑，并发送消息
-    :param mission: 任务名称
-    :param task_func: 要执行的任务函数
-    :param args: 任务函数的参数
-    :param kwargs: 任务函数的关键字参数
-    :return: 成功为 1，失败为 0
-    """
     try:
         task_func(*args, **kwargs)
         send_text_msg_to_myself(f'[LongQi] [{now()}] Data update for Table {mission} succeeded.')
