@@ -16,7 +16,7 @@ from funcs import *
 
 INTERACTIVE_CARD = {
     'crypto_report': {'id': 'AAq7F02QhXIfo', 'version_name': '1.0.8'},
-    'risk_report': {'id': 'AAq7xvyDvK3WX', 'version_name': '1.0.1'}
+    'risk_report': {'id': 'AAq7xvyDvK3WX', 'version_name': '1.0.2'}
 }
 
 app_id = FEISHU_CONFIG['LongQi']['app_id']
