@@ -9,3 +9,4 @@ from funcs.synchronous.exchange_rate import synchronous_exchange_rate
 from funcs.synchronous.balance import synchronous_balance
 
 from funcs.datapush.crypto_report import datapush_crypto_report
+from funcs.datapush.risk_report import datapush_risk_report

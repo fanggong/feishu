@@ -62,11 +62,20 @@ def handle_crypto_update():
 
 
 def handle_crypto_report():
-    send_text_msg_to_myself(f'[LongQi] [{now()}] 开始报告生成')
+    send_text_msg_to_myself(f'[LongQi] [{now()}] Finance Report Generating')
     send_interactive_card_to_my_self(
         template_variable=datapush_crypto_report(conn=conn),
         template_id=INTERACTIVE_CARD['crypto_report']['id'],
         template_version_name=INTERACTIVE_CARD['crypto_report']['version_name']
+    )
+
+
+def handle_risk_report():
+    send_text_msg_to_myself(f'[LongQi] [{now()}] Risk Report Generating')
+    send_interactive_card_to_my_self(
+        template_variable=datapush_risk_report(conn=conn),
+        template_id=INTERACTIVE_CARD['risk_report']['id'],
+        template_version_name=INTERACTIVE_CARD['risk_report']['version_name']
     )
 
 
@@ -77,6 +86,8 @@ async def event():
         asyncio.create_task(run_in_back(handle_crypto_update))
     elif data['event']['event_key'] == 'crypto_report':
         asyncio.create_task(run_in_back(handle_crypto_report))
+    elif data['event']['event_key'] == 'risk_report':
+        asyncio.create_task(run_in_back(handle_risk_report()))
     return jsonify({'message': 'Event received'}), 200
 
 

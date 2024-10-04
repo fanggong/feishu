@@ -193,7 +193,3 @@ def datapush_crypto_report(conn: MysqlEngine):
         'asset': asset_format
     }
     return res
-
-
-# def datapush_risk_report(conn: MysqlEngine):
-#     sql =

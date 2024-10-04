@@ -81,7 +81,7 @@ def update_log(conn: MysqlEngine, s, f):
 
 if __name__ == '__main__':
     send_interactive_card_to_my_self(
-        template_variable=datapush_crypto_report(conn=conn),
+        template_variable=datapush_risk_report(conn=conn),
         template_id=INTERACTIVE_CARD['crypto_report']['id'],
         template_version_name=INTERACTIVE_CARD['crypto_report']['version_name']
     )
