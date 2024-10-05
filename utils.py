@@ -25,6 +25,9 @@ INTERACTIVE_CARD = {
 app_id = FEISHU_CONFIG['LongQi']['app_id']
 app_secret = FEISHU_CONFIG['LongQi']['app_secret']
 
+app_id_BC = FEISHU_CONFIG['BC']['app_id']
+app_secret_BC = FEISHU_CONFIG['BC']['app_secret']
+
 yinbao_app_id = YINBAO_CONFIG['app_id']
 yinbao_app_key = YINBAO_CONFIG['app_key']
 
@@ -43,6 +46,7 @@ funding_api = FundingAPI(api_key, secret_key, passphrase, False, '0')
 public_api = PublicAPI(api_key, secret_key, passphrase, False, '0')
 market_api = MarketAPI(api_key, secret_key, passphrase, False, '0')
 feishu_app_robot = FeishuAppRobot(app_id=app_id, app_secret=app_secret)
+
 
 store_api = StoreApi(app_id=yinbao_app_id, app_key=yinbao_app_key)
 sales_api = SalesApi(app_id=yinbao_app_id, app_key=yinbao_app_key)
