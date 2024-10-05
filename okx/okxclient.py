@@ -11,7 +11,8 @@ from . import consts as c, utils, exceptions
 
 class OkxClient(Client):
 
-    def __init__(self, api_key='-1', api_secret_key='-1', passphrase='-1', use_server_time=None, flag='1',base_api=c.API_URL, debug='True', proxy=None):
+    def __init__(self, api_key='-1', api_secret_key='-1', passphrase='-1', use_server_time=None, flag='1',
+                 base_api=c.API_URL, debug='True', proxy=None):
         super().__init__(base_url=base_api, http2=True, proxy=proxy)
         self.API_KEY = api_key
         self.API_SECRET_KEY = api_secret_key
@@ -32,7 +33,8 @@ class OkxClient(Client):
             timestamp = self._get_timestamp()
         body = json.dumps(params) if method == c.POST else ""
         if self.API_KEY != '-1':
-            sign = utils.sign(utils.pre_hash(timestamp, method, request_path, str(body), self.debug), self.API_SECRET_KEY)
+            sign = utils.sign(utils.pre_hash(timestamp, method, request_path, str(body), self.debug),
+                              self.API_SECRET_KEY)
             header = utils.get_header(self.API_KEY, sign, timestamp, self.PASSPHRASE, self.flag, self.debug)
         else:
             header = utils.get_header_no_sign(self.flag, self.debug)

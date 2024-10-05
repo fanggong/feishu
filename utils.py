@@ -1,7 +1,6 @@
 import datetime
 import lark_oapi as lark
 import time
-import pandas as od
 import pandas as pd
 
 from config import *
@@ -12,6 +11,10 @@ from okx.Funding import FundingAPI
 from okx.PublicData import PublicAPI
 from okx.MarketData import MarketAPI
 from feishu.FeishuAppRobot import FeishuAppRobot
+from yinbao.Store import StoreApi
+from yinbao.Sales import SalesApi
+from yinbao.Products import ProductsApi
+from yinbao.Customers import CustomersApi
 from funcs import *
 
 INTERACTIVE_CARD = {
@@ -21,6 +24,9 @@ INTERACTIVE_CARD = {
 
 app_id = FEISHU_CONFIG['LongQi']['app_id']
 app_secret = FEISHU_CONFIG['LongQi']['app_secret']
+
+yinbao_app_id = YINBAO_CONFIG['app_id']
+yinbao_app_key = YINBAO_CONFIG['app_key']
 
 api_key = OKX_CONFIG['api_key']
 secret_key = OKX_CONFIG['secret_key']
@@ -37,6 +43,11 @@ funding_api = FundingAPI(api_key, secret_key, passphrase, False, '0')
 public_api = PublicAPI(api_key, secret_key, passphrase, False, '0')
 market_api = MarketAPI(api_key, secret_key, passphrase, False, '0')
 feishu_app_robot = FeishuAppRobot(app_id=app_id, app_secret=app_secret)
+
+store_api = StoreApi(app_id=yinbao_app_id, app_key=yinbao_app_key)
+sales_api = SalesApi(app_id=yinbao_app_id, app_key=yinbao_app_key)
+products_api = ProductsApi(app_id=yinbao_app_id, app_key=yinbao_app_key)
+customer_api = CustomersApi(app_id=yinbao_app_id, app_key=yinbao_app_key)
 
 
 def send_text_msg_to_myself(content):
@@ -84,6 +95,7 @@ def update_log(conn: MysqlEngine, s, f):
 
 
 if __name__ == '__main__':
-    synchronous_balance_on_chain(
-        conn=conn, api_key=MORALIS_CONFIG['api_key'], params_dict=ADDRESS
-    )
+    # tmp = sales_api.get_tickets(start_time='2024-09-29 00:00:00', end_time='2024-10-05 00:00:01')
+    # tmp = store_api.get_store_list()
+    tmp = customer_api.get_customers()
+    print(tmp)
