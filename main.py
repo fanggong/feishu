@@ -107,16 +107,18 @@ async def event():
     return jsonify({'message': 'Event received'}), 200
 
 
-@app.route('/event_bar', methods=['POST'])
+@app.route('/event-bar', methods=['POST'])
 async def event_bar():
     data = await request.get_json()
-    tasks = {
-        'bar_update': handle_bar_update
-    }
-    if tasks.get(data['event']['event_key']):
-        asyncio.create_task(run_in_back(tasks.get(data['event']['event_key'])))
-
-    return jsonify({'message': 'Event received'}), 200
+    challenge = data['challenge']
+    return jsonify({'challenge': challenge}), 200
+    # tasks = {
+    #     'bar_update': handle_bar_update
+    # }
+    # if tasks.get(data['event']['event_key']):
+    #     asyncio.create_task(run_in_back(tasks.get(data['event']['event_key'])))
+    #
+    # return jsonify({'message': 'Event received'}), 200
 
 
 # @app.route('/webhook', methods=['POST'])
