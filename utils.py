@@ -29,8 +29,8 @@ PUBLIC_API = PublicAPI(API_KEY, SECRET_KEY, PASSPHRASE, False, '0')
 MARKET_API = MarketAPI(API_KEY, SECRET_KEY, PASSPHRASE, False, '0')
 
 # feishu app robot
-FEISHU_APP_ROBOT_CRYPTO = FeishuAppRobot(app_id=APP_ID_CRYPTO, app_secret=APP_SECRET_CRYPTO)
-FEISHU_APP_ROBOT_BAR = FeishuAppRobot(app_id=APP_ID_BAR, app_secret=APP_SECRET_BAR)
+FEISHU_APP_ROBOT_CRYPTO = FeishuAppRobot(app_id=APP_ID_CRYPTO, app_secret=APP_SECRET_CRYPTO, name=CRYPTO_APP_NAME)
+FEISHU_APP_ROBOT_BAR = FeishuAppRobot(app_id=APP_ID_BAR, app_secret=APP_SECRET_BAR, name=BAR_APP_NAME)
 
 # yinbao api client
 STORE_API = StoreApi(app_id=APP_ID_YINBAO, app_key=APP_KEY_YINBAO)
