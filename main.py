@@ -46,7 +46,7 @@ def handle_crypto_update():
     )
     s = f = 0
     for mission, func, func_args in tasks:
-        result = run_update_task(mission, func, **func_args)
+        result = run_update_task(mission, func, FEISHU_APP_ROBOT_CRYPTO, **func_args)
         s += result
         f += (1 - result)
     send_text_msg_to_myself(
@@ -85,7 +85,7 @@ def handle_bar_update():
     send_text_msg_to_myself(FEISHU_APP_ROBOT_BAR, f'[{BAR_APP_NAME}] [{str_now()}] Starting data update')
     s = f = 0
     for mission, func, func_args in tasks:
-        result = run_update_task(mission, func, **func_args)
+        result = run_update_task(mission, func, FEISHU_APP_ROBOT_BAR, **func_args)
         s += result
         f += (1 - result)  # 如果任务失败，增加 f 计数
 
