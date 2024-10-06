@@ -88,12 +88,13 @@ def get_yesterday(dt: datetime.datetime):
     return dt.strftime('%Y-%m-%d %H:%M:%S')
 
 
-def update_log(conn: MysqlEngine, s, f):
+def update_log(conn: MysqlEngine, s, f, role):
     dat = pd.DataFrame({
         'update_at': [now()],
         'num_all': [s + f],
         'num_success': [s],
-        'num_fail': [f]
+        'num_fail': [f],
+        'role': role
     })
     conn.append_dat(dat=dat, tbl_name='update_log')
 
@@ -101,5 +102,4 @@ def update_log(conn: MysqlEngine, s, f):
 if __name__ == '__main__':
     # tmp = sales_api.get_tickets(start_time='2024-09-29 00:00:00', end_time='2024-10-05 00:00:01')
     # tmp = store_api.get_store_list()
-    tmp = customer_api.get_customers()
-    print(tmp)
+    synchronous_customers(conn=conn, customer_api=customer_api)

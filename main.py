@@ -50,7 +50,7 @@ def handle_crypto_update():
 
     send_text_msg_to_myself(f'[LongQi] [{now()}] Data update completed. A total of {f + s} tasks were executed, with {s} successful and {f} failed.')
 
-    update_log(conn=conn, s=s, f=f)
+    update_log(conn=conn, s=s, f=f, role='LongQi')
 
 
 def handle_crypto_report():
@@ -69,6 +69,29 @@ def handle_risk_report():
         template_id=INTERACTIVE_CARD['risk_report']['id'],
         template_version_name=INTERACTIVE_CARD['risk_report']['version_name']
     )
+
+
+def handle_bar_update():
+    s = f = 0
+    start_time = get_yesterday(datetime.datetime.now())
+    start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
+
+    send_text_msg_to_myself(f'[BC] [{now()}] Starting data update')
+
+    # 任务列表：任务名称和对应函数
+    tasks = [
+        ('CUSTOMERS', synchronous_customers, {'conn': conn, 'account_api': customer_api})
+    ]
+
+    # 执行任务
+    for mission, func, func_args in tasks:
+        result = run_update_task(mission, func, **func_args)
+        s += result
+        f += (1 - result)  # 如果任务失败，增加 f 计数
+
+    send_text_msg_to_myself(f'[BC] [{now()}] Data update completed. A total of {f + s} tasks were executed, with {s} successful and {f} failed.')
+
+    update_log(conn=conn, s=s, f=f, role='BC')
 
 
 @app.route('/event', methods=['POST'])
