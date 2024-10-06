@@ -1,8 +1,7 @@
 
-
 from database.Mysql import MysqlEngine
 from funcs.utils import *
-import pandas as pd
+from funcs.const import *
 
 
 def datapush_risk_report(conn: MysqlEngine):

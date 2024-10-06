@@ -1,8 +1,10 @@
-import pandas as pd
+from funcs.const import EXCHANGE_RATE
 from funcs.utils import *
+from database.Mysql import MysqlEngine
+from okx.MarketData import MarketAPI
 
 
-def synchronous_exchange_rate(conn, market_api):
+def synchronous_exchange_rate(conn: MysqlEngine, market_api: MarketAPI):
     columns = {
         'usdCny': 'usd_cny'
     }
@@ -10,4 +12,4 @@ def synchronous_exchange_rate(conn, market_api):
     dat = pd.DataFrame(dat)
     dat = dat[columns.keys()]
     dat = dat.rename(columns=columns)
-    conn.replace_dat(dat=dat, tbl_name='exchange_rate')
+    conn.replace_dat(dat=dat, tbl_name=EXCHANGE_RATE)

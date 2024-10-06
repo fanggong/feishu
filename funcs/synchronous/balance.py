@@ -1,5 +1,5 @@
-import pandas as pd
 from funcs.utils import *
+from funcs.const import BALANCE
 from okx.Account import AccountAPI
 from database.Mysql import MysqlEngine
 
@@ -54,4 +54,4 @@ def synchronous_balance(conn: MysqlEngine, account_api: AccountAPI, **kwargs):
     dat = dat[columns.keys()]
     dat = dat.replace({'': None})
     dat = dat.rename(columns=columns)
-    conn.replace_dat(dat=dat, tbl_name='balance')
+    conn.replace_dat(dat=dat, tbl_name=BALANCE)

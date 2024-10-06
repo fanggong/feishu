@@ -1,9 +1,11 @@
 import time
-import pandas as pd
+from funcs.const import BILLS_HISTORY
+from database.Mysql import MysqlEngine
 from funcs.utils import *
+from okx.Account import AccountAPI
 
 
-def _get_bills_history(account_api, **kwargs):
+def _get_bills_history(account_api: AccountAPI, **kwargs):
     dat = account_api.get_account_bills_archive(**kwargs).get('data')
     time.sleep(0.4)
     if len(dat) == 0:
@@ -14,7 +16,7 @@ def _get_bills_history(account_api, **kwargs):
         return dat
 
 
-def synchronous_bills_history(conn, path=None, account_api=None, **kwargs):
+def synchronous_bills_history(conn: MysqlEngine, path=None, account_api=None, **kwargs):
     columns = {
         'instType': 'inst_type',
         'billId': 'bill_id',
@@ -59,6 +61,6 @@ def synchronous_bills_history(conn, path=None, account_api=None, **kwargs):
     dat['fillTime'] = dat.fillTime.apply(from_timestamp)
     dat = dat.replace({'': None, '-': None})
     dat = dat.rename(columns=columns)
-    conn.upsert_dat(dat=dat, tbl_name='bills_history')
+    conn.upsert_dat(dat=dat, tbl_name=BILLS_HISTORY)
 
 

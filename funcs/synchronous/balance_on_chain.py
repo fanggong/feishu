@@ -1,6 +1,7 @@
 import pandas as pd
 from moralis import sol_api, evm_api
 from database.Mysql import MysqlEngine
+from funcs.const import BALANCE_ON_CHAIN
 
 
 def get_balance_on_chain_sol_native(api_key, params):
@@ -74,4 +75,4 @@ def synchronous_balance_on_chain(conn: MysqlEngine, api_key: str, params_dict: d
             else:
                 tmp = pd.DataFrame()
             dat = pd.concat([dat, tmp])
-    conn.replace_dat(dat=dat, tbl_name='balance_on_chain')
+    conn.replace_dat(dat=dat, tbl_name=BALANCE_ON_CHAIN)

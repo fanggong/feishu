@@ -1,8 +1,10 @@
-import pandas as pd
+from funcs.const import FILLS_HISTORY
 from funcs.utils import *
+from database.Mysql import MysqlEngine
+from okx.Trade import TradeAPI
 
 
-def _get_fills_history(trade_api, inst_type, **kwargs):
+def _get_fills_history(trade_api: TradeAPI, inst_type, **kwargs):
     dat = trade_api.get_fills_history(instType=inst_type, **kwargs).get('data')
     if len(dat) == 0:
         return dat
@@ -12,7 +14,7 @@ def _get_fills_history(trade_api, inst_type, **kwargs):
         return dat
 
 
-def synchronous_fills_history(conn, path=None, trade_api=None, **kwargs):
+def synchronous_fills_history(conn: MysqlEngine, path=None, trade_api=None, **kwargs):
     columns = {
         'instType': 'inst_type',
         'instId': 'inst_id',
@@ -42,5 +44,5 @@ def synchronous_fills_history(conn, path=None, trade_api=None, **kwargs):
         dat = dat[columns.keys()]
     dat['ts'] = dat.ts.apply(from_timestamp)
     dat = dat.rename(columns=columns)
-    conn.upsert_dat(dat=dat, tbl_name='fills_history')
+    conn.upsert_dat(dat=dat, tbl_name=FILLS_HISTORY)
 

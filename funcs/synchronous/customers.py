@@ -1,7 +1,6 @@
-import pandas as pd
-
 from database.Mysql import MysqlEngine
 from funcs.utils import *
+from funcs.const import CUSTOMERS
 from yinbao.Customers import CustomersApi
 
 
@@ -38,4 +37,4 @@ def synchronous_customers(conn: MysqlEngine, customer_api: CustomersApi):
     dat = dat[columns.keys()]
     dat = dat.replace({'': None})
     dat = dat.rename(columns=columns)
-    conn.replace_dat(dat=dat, tbl_name='customers')
+    conn.replace_dat(dat=dat, tbl_name=CUSTOMERS)

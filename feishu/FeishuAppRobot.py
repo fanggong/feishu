@@ -4,8 +4,12 @@ import lark_oapi as lark
 
 
 class FeishuAppRobot(FeishuClient):
-    def __init__(self, app_id=None, app_secret=None):
+    def __init__(self, app_id=None, app_secret=None, name=None):
         FeishuClient.__init__(self, app_id, app_secret)
+        self.name = name
+
+    def get_robot_name(self):
+        return self.name
 
     def send_msg(self, receive_id, msg_type, content, receive_id_type='user_id'):
         # See https://open.feishu.cn/document/server-docs/im-v1/message/create for more infomation

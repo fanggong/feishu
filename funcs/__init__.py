@@ -13,3 +13,5 @@ from funcs.synchronous.customers import synchronous_customers
 
 from funcs.datapush.crypto_report import datapush_crypto_report
 from funcs.datapush.risk_report import datapush_risk_report
+
+from funcs.const import *

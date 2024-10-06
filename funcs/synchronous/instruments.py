@@ -1,8 +1,10 @@
-import pandas as pd
+from funcs.const import INSTRUMENTS
 from funcs.utils import *
+from database.Mysql import MysqlEngine
+from okx.PublicData import PublicAPI
 
 
-def synchronous_instruments(conn, public_api, **kwargs):
+def synchronous_instruments(conn: MysqlEngine, public_api: PublicAPI, **kwargs):
     columns = {
         'alias': 'alias',
         'baseCcy': 'base_ccy',
@@ -43,4 +45,4 @@ def synchronous_instruments(conn, public_api, **kwargs):
     dat = dat[columns.keys()]
     dat = dat.replace({'': None})
     dat = dat.rename(columns=columns)
-    conn.upsert_dat(dat=dat, tbl_name='instruments')
+    conn.upsert_dat(dat=dat, tbl_name=INSTRUMENTS)

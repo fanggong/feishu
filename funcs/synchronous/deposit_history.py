@@ -1,9 +1,11 @@
 import time
-import pandas as pd
+from funcs.const import DEPOSIT_HISTORY
 from funcs.utils import *
+from database.Mysql import MysqlEngine
+from okx.Funding import FundingAPI
 
 
-def _get_deposit_history(funding_api, **kwargs):
+def _get_deposit_history(funding_api: FundingAPI, **kwargs):
     dat = funding_api.get_deposit_history(**kwargs).get('data')
     time.sleep(0.2)
     if len(dat) == 0:
@@ -14,7 +16,7 @@ def _get_deposit_history(funding_api, **kwargs):
         return dat
 
 
-def synchronous_deposit_history(conn, funding_api=None, **kwargs):
+def synchronous_deposit_history(conn: MysqlEngine, funding_api=None, **kwargs):
     columns = {
         'actualDepBlkConfirm': 'actual_dep_blk_confirm',
         'amt': 'amt',
@@ -35,6 +37,6 @@ def synchronous_deposit_history(conn, funding_api=None, **kwargs):
     dat['ts'] = dat.ts.apply(from_timestamp)
     dat = dat.replace({'': None, '-': None})
     dat = dat.rename(columns=columns)
-    conn.upsert_dat(dat=dat, tbl_name='deposit_history')
+    conn.upsert_dat(dat=dat, tbl_name=DEPOSIT_HISTORY)
 
 

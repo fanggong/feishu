@@ -1,8 +1,11 @@
-import pandas as pd
+from funcs.const import POSITIONS
 from funcs.utils import *
+from database.Mysql import MysqlEngine
+from okx.Account import AccountAPI
 
 
-def synchronous_positions(conn, account_api, **kwargs):
+
+def synchronous_positions(conn: MysqlEngine, account_api: AccountAPI, **kwargs):
     columns = {
         'adl': 'adl',
         'availPos': 'avail_pos',
@@ -74,4 +77,4 @@ def synchronous_positions(conn, account_api, **kwargs):
     dat['cTime'] = dat.cTime.apply(from_timestamp)
     dat = dat.replace({'': None, '-': None})
     dat = dat.rename(columns=columns)
-    conn.replace_dat(dat=dat, tbl_name='positions')
+    conn.replace_dat(dat=dat, tbl_name=POSITIONS)

@@ -1,8 +1,10 @@
-import pandas as pd
+from funcs.const import MARK_PRICE
 from funcs.utils import *
+from database.Mysql import MysqlEngine
+from okx.PublicData import PublicAPI
 
 
-def synchronous_mark_price(conn, public_api, inst_type, **kwargs):
+def synchronous_mark_price(conn: MysqlEngine, public_api: PublicAPI, inst_type, **kwargs):
     columns = {
         'instType': 'inst_type',
         'instId': 'inst_id',
@@ -15,4 +17,4 @@ def synchronous_mark_price(conn, public_api, inst_type, **kwargs):
     dat['ts'] = dat.ts.apply(from_timestamp)
     dat = dat.replace({'': None, '-': None})
     dat = dat.rename(columns=columns)
-    conn.upsert_dat(dat=dat, tbl_name='mark_price')
+    conn.upsert_dat(dat=dat, tbl_name=MARK_PRICE)
