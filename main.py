@@ -13,10 +13,20 @@ async def run_in_back(sync_func):
 def run_update_task(mission, task_func, *args, **kwargs):
     try:
         task_func(*args, **kwargs)
-        send_text_msg_to_myself(f'[LongQi] [{now()}] Data update for Table {mission} succeeded.')
+        send_text_msg_to_myself(feishu_app_robot, f'[LongQi] [{now()}] Data update for Table {mission} succeeded.')
         return 1  # 成功
     except BaseException as e:
-        send_text_msg_to_myself(f'[LongQi] [{now()}] Data update for Table {mission} failed. Reason for failure:：{str(e)}')
+        send_text_msg_to_myself(feishu_app_robot, f'[LongQi] [{now()}] Data update for Table {mission} failed. Reason for failure:：{str(e)}')
+        return 0  # 失败
+
+
+def run_update_task_bc(mission, task_func, *args, **kwargs):
+    try:
+        task_func(*args, **kwargs)
+        send_text_msg_to_myself(feishu_app_robot_BC, f'[BC] [{now()}] Data update for Table {mission} succeeded.')
+        return 1  # 成功
+    except BaseException as e:
+        send_text_msg_to_myself(feishu_app_robot_BC, f'[BC] [{now()}] Data update for Table {mission} failed. Reason for failure:：{str(e)}')
         return 0  # 失败
 
 
@@ -25,7 +35,7 @@ def handle_crypto_update():
     start_time = get_yesterday(datetime.datetime.now())
     start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
 
-    send_text_msg_to_myself(f'[LongQi] [{now()}] Starting data update')
+    send_text_msg_to_myself(feishu_app_robot, f'[LongQi] [{now()}] Starting data update')
 
     # 任务列表：任务名称和对应函数
     tasks = [
@@ -48,13 +58,16 @@ def handle_crypto_update():
         s += result
         f += (1 - result)  # 如果任务失败，增加 f 计数
 
-    send_text_msg_to_myself(f'[LongQi] [{now()}] Data update completed. A total of {f + s} tasks were executed, with {s} successful and {f} failed.')
+    send_text_msg_to_myself(
+        feishu_app_robot,
+        f'[LongQi] [{now()}] Data update completed. A total of {f + s} tasks were executed, with {s} successful and {f} failed.'
+    )
 
     update_log(conn=conn, s=s, f=f, role='LongQi')
 
 
 def handle_crypto_report():
-    send_text_msg_to_myself(f'[LongQi] [{now()}] Finance Report Generating')
+    send_text_msg_to_myself(feishu_app_robot, f'[LongQi] [{now()}] Finance Report Generating')
     send_interactive_card_to_my_self(
         template_variable=datapush_crypto_report(conn=conn),
         template_id=INTERACTIVE_CARD['crypto_report']['id'],
@@ -63,7 +76,7 @@ def handle_crypto_report():
 
 
 def handle_risk_report():
-    send_text_msg_to_myself(f'[LongQi] [{now()}] Risk Report Generating')
+    send_text_msg_to_myself(feishu_app_robot, f'[LongQi] [{now()}] Risk Report Generating')
     send_interactive_card_to_my_self(
         template_variable=datapush_risk_report(conn=conn),
         template_id=INTERACTIVE_CARD['risk_report']['id'],
@@ -75,20 +88,23 @@ def handle_bar_update():
     s = f = 0
     start_time = get_yesterday(datetime.datetime.now())
 
-    send_text_msg_to_myself(f'[BC] [{now()}] Starting data update')
+    send_text_msg_to_myself(feishu_app_robot_BC, f'[BC] [{now()}] Starting data update')
 
     # 任务列表：任务名称和对应函数
     tasks = [
-        ('CUSTOMERS', synchronous_customers, {'conn': conn, 'account_api': customer_api})
+        ('CUSTOMERS', synchronous_customers, {'conn': conn, 'customer_api': customer_api})
     ]
 
     # 执行任务
     for mission, func, func_args in tasks:
-        result = run_update_task(mission, func, **func_args)
+        result = run_update_task_bc(mission, func, **func_args)
         s += result
         f += (1 - result)  # 如果任务失败，增加 f 计数
 
-    send_text_msg_to_myself(f'[BC] [{now()}] Data update completed. A total of {f + s} tasks were executed, with {s} successful and {f} failed.')
+    send_text_msg_to_myself(
+        feishu_app_robot_BC,
+        f'[BC] [{now()}] Data update completed. A total of {f + s} tasks were executed, with {s} successful and {f} failed.'
+    )
 
     update_log(conn=conn, s=s, f=f, role='BC')
 
