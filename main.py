@@ -60,6 +60,7 @@ def handle_crypto_update():
 def handle_crypto_report():
     send_text_msg_to_myself(FEISHU_APP_ROBOT_CRYPTO, f'[{CRYPTO_APP_NAME}] [{str_now()}] Finance Report Generating')
     send_interactive_card_to_my_self(
+        robot=FEISHU_APP_ROBOT_CRYPTO,
         template_variable=datapush_crypto_report(conn=CONN),
         template_id=INTERACTIVE_CARD['crypto_report']['id'],
         template_version_name=INTERACTIVE_CARD['crypto_report']['version_name']
@@ -69,6 +70,7 @@ def handle_crypto_report():
 def handle_risk_report():
     send_text_msg_to_myself(FEISHU_APP_ROBOT_CRYPTO, f'[{CRYPTO_APP_NAME}] [{str_now()}] Risk Report Generating')
     send_interactive_card_to_my_self(
+        robot=FEISHU_APP_ROBOT_CRYPTO,
         template_variable=datapush_risk_report(conn=CONN),
         template_id=INTERACTIVE_CARD['risk_report']['id'],
         template_version_name=INTERACTIVE_CARD['risk_report']['version_name']
