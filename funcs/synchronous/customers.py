@@ -4,7 +4,7 @@ from funcs.const import CUSTOMERS
 from yinbao.Customers import CustomersApi
 
 
-def synchronous_customers(conn: MysqlEngine, customer_api: CustomersApi):
+def synchronous_customers(conn: MysqlEngine, customers_api: CustomersApi):
     columns = {
         'customerUid': 'customer_uid',
         'categoryName': 'category_name',
@@ -29,7 +29,7 @@ def synchronous_customers(conn: MysqlEngine, customer_api: CustomersApi):
         'totalTicketNum': 'total_ticket_num',
         'amountInArrear': 'amount_in_arrear'
     }
-    dat = customer_api.get_customers()['data']['result']
+    dat = customers_api.get_customers()['data']['result']
     for item in dat:
         ext_info = item.pop('extInfo', {})
         item.update(ext_info)

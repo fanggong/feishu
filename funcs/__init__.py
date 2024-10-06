@@ -10,6 +10,7 @@ from funcs.synchronous.balance import synchronous_balance
 from funcs.synchronous.balance_on_chain import synchronous_balance_on_chain
 
 from funcs.synchronous.customers import synchronous_customers
+from funcs.synchronous.products import synchronous_product
 
 from funcs.datapush.crypto_report import datapush_crypto_report
 from funcs.datapush.risk_report import datapush_risk_report

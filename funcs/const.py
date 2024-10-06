@@ -14,3 +14,4 @@ WITHDRAW_HISTORY = 'withdraw_history'
 
 # bar
 CUSTOMERS = 'customers'
+PRODUCTS = 'products'

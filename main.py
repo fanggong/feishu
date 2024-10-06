@@ -81,7 +81,8 @@ def handle_bar_update():
     start_time = get_yesterday(datetime.datetime.now())
 
     tasks = [
-        ('CUSTOMERS', synchronous_customers, {'conn': CONN, 'customer_api': CUSTOMERS_API})
+        ('CUSTOMERS', synchronous_customers, {'conn': CONN, 'customer_api': CUSTOMERS_API}),
+        ('PRODUCTS', synchronous_product, {'conn': CONN, 'products_api': PRODUCTS_API})
     ]
 
     send_text_msg_to_myself(FEISHU_APP_ROBOT_BAR, f'[{BAR_APP_NAME}] [{str_now()}] Starting data update')

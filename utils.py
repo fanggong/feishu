@@ -86,6 +86,4 @@ def update_log(conn: MysqlEngine, s: int, f: int, role: str):
 
 
 if __name__ == '__main__':
-    # tmp = sales_api.get_tickets(start_time='2024-09-29 00:00:00', end_time='2024-10-05 00:00:01')
-    # tmp = store_api.get_store_list()
-    synchronous_customers(conn=CONN, customer_api=CUSTOMERS_API)
+    synchronous_product(CONN, PRODUCTS_API)
