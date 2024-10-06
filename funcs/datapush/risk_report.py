@@ -66,6 +66,7 @@ def datapush_risk_report(conn: MysqlEngine):
     sql = f'''
     select max(update_at) update_at
     from update_log
+    where role = 'LongQi'
     '''
     update_at = conn.fetch_dat(sql).update_at[0].strftime('%Y-%m-%d %H:%M:%S')
 
