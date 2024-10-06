@@ -71,7 +71,7 @@ def send_interactive_card_to_my_self(template_variable, template_id, template_ve
         }
     }
     content = lark.JSON.marshal(content)
-    feishu_app_robot.send_msg(receive_id=OPEN_ID['Fang Yongchao'], msg_type='interactive', content=content)
+    feishu_app_robot.send_msg(receive_id=USER_ID['Fang Yongchao'], msg_type='interactive', content=content)
 
 
 def now():
