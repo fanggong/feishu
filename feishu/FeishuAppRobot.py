@@ -7,7 +7,7 @@ class FeishuAppRobot(FeishuClient):
     def __init__(self, app_id=None, app_secret=None):
         FeishuClient.__init__(self, app_id, app_secret)
 
-    def send_msg(self, receive_id, msg_type, content, receive_id_type='open_id'):
+    def send_msg(self, receive_id, msg_type, content, receive_id_type='user_id'):
         # See https://open.feishu.cn/document/server-docs/im-v1/message/create for more infomation
         body = {
             'receive_id': receive_id,

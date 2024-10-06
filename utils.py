@@ -58,7 +58,7 @@ customer_api = CustomersApi(app_id=yinbao_app_id, app_key=yinbao_app_key)
 
 def send_text_msg_to_myself(robot, content):
     content = lark.JSON.marshal({'text': content})
-    robot.send_msg(receive_id=OPEN_ID['Fang Yongchao'], msg_type='text', content=content)
+    robot.send_msg(receive_id=USER_ID['Fang Yongchao'], msg_type='text', content=content)
 
 
 def send_interactive_card_to_my_self(template_variable, template_id, template_version_name):
