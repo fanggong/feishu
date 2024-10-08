@@ -82,7 +82,8 @@ def handle_bar_update():
 
     tasks = [
         ('CUSTOMERS', synchronous_customers, {'conn': CONN, 'customers_api': CUSTOMERS_API}),
-        ('PRODUCTS', synchronous_product, {'conn': CONN, 'products_api': PRODUCTS_API})
+        ('PRODUCTS', synchronous_product, {'conn': CONN, 'products_api': PRODUCTS_API}),
+        ('TICKETS', synchronous_tickets, {'conn': CONN, 'sales_api': SALES_API, 'start_time': start_time, 'end_time': str_now()})
     ]
 
     send_text_msg_to_myself(FEISHU_APP_ROBOT_BAR, f'[{BAR_APP_NAME}] [{str_now()}] Starting data update')
@@ -90,7 +91,7 @@ def handle_bar_update():
     for mission, func, func_args in tasks:
         result = run_update_task(mission, func, FEISHU_APP_ROBOT_BAR, **func_args)
         s += result
-        f += (1 - result)  # 如果任务失败，增加 f 计数
+        f += (1 - result)
 
     send_text_msg_to_myself(
         FEISHU_APP_ROBOT_BAR,

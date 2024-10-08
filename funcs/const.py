@@ -15,3 +15,5 @@ WITHDRAW_HISTORY = 'withdraw_history'
 # bar
 CUSTOMERS = 'customers'
 PRODUCTS = 'products'
+TICKETS = 'tickets'
+TICKET_ITEMS = 'ticket_items'
