@@ -5,3 +5,4 @@ import main
 
 if __name__ == '__main__':
     main.handle_crypto_update()
+    main.handle_bar_update()

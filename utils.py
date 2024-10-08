@@ -86,7 +86,4 @@ def update_log(conn: MysqlEngine, s: int, f: int, role: str):
 
 
 if __name__ == '__main__':
-    # start_time = '2023-01-01 00:00:00'
-    # end_time = '2024-10-08 00:00:00'
-    # synchronous_tickets(CONN, SALES_API, start_time, end_time)
-    print(1)
+    synchronous_product(conn=CONN, products_api=PRODUCTS_API)
