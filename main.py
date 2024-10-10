@@ -101,6 +101,16 @@ def handle_bar_update():
     update_log(conn=CONN, s=s, f=f, role=BAR_APP_NAME)
 
 
+def handle_sales_report():
+    send_text_msg_to_myself(FEISHU_APP_ROBOT_BAR, f'[{BAR_APP_NAME}] [{str_now()}] Sales Report Generating')
+    send_interactive_card_to_my_self(
+        robot=FEISHU_APP_ROBOT_BAR,
+        template_variable=datapush_sales_report(conn=CONN),
+        template_id=INTERACTIVE_CARD['sales_report']['id'],
+        template_version_name=INTERACTIVE_CARD['sales_report']['version_name']
+    )
+
+
 @app.route('/event', methods=['POST'])
 async def event():
     data = await request.get_json()
@@ -119,7 +129,8 @@ async def event():
 async def event_bar():
     data = await request.get_json()
     tasks = {
-        'bar_update': handle_bar_update
+        'bar_update': handle_bar_update,
+        'sales_report': handle_sales_report
     }
     if tasks.get(data['event']['event_key']):
         asyncio.create_task(run_in_back(tasks.get(data['event']['event_key'])))
@@ -137,8 +148,8 @@ async def webhook():
 @app.route('/webhook-bar', methods=['POST'])
 async def webhook_bar():
     data = await request.get_json()
-    challenge = data.get('challenge')
-    return jsonify({'challenge': challenge}), 200
+    print(data)
+    return jsonify({}), 200
 
 
 if __name__ == '__main__':

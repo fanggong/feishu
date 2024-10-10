@@ -5,7 +5,8 @@ MAX_RETRY = 5
 # feishu interactive card
 INTERACTIVE_CARD = {
     'crypto_report': {'id': 'AAq7F02QhXIfo', 'version_name': '1.0.9'},
-    'risk_report': {'id': 'AAq7xvyDvK3WX', 'version_name': '1.0.3'}
+    'risk_report': {'id': 'AAq7xvyDvK3WX', 'version_name': '1.0.3'},
+    'sales_report': {'id': 'AAq72IXC2cGmT', 'version_name': '1.0.0'}
 }
 
 # feishu app
