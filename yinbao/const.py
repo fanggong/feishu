@@ -10,3 +10,5 @@ TICKETS = '/openapi/v1/ticketOpenApi/queryTicketPages'
 PRODUCTS = '/openapi/v1/productOpenApi/queryProductPages'
 
 CUSTOMERS = '/openapi/v1/customerOpenApi/queryCustomerPages'
+
+ACCESS_TIMES = '/openapi/v1/openApiLimitAccess/queryAccessTimes'

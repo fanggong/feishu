@@ -14,6 +14,7 @@ from yinbao.Store import StoreApi
 from yinbao.Sales import SalesApi
 from yinbao.Products import ProductsApi
 from yinbao.Customers import CustomersApi
+from yinbao.Access import AccessApi
 from funcs import *
 
 from const import *
@@ -37,6 +38,7 @@ STORE_API = StoreApi(app_id=APP_ID_YINBAO, app_key=APP_KEY_YINBAO)
 SALES_API = SalesApi(app_id=APP_ID_YINBAO, app_key=APP_KEY_YINBAO)
 PRODUCTS_API = ProductsApi(app_id=APP_ID_YINBAO, app_key=APP_KEY_YINBAO)
 CUSTOMERS_API = CustomersApi(app_id=APP_ID_YINBAO, app_key=APP_KEY_YINBAO)
+ACCESS_API = AccessApi(app_id=APP_ID_YINBAO, app_key=APP_KEY_YINBAO)
 
 
 def send_text_msg_to_myself(robot: FeishuAppRobot, content: str) -> None:
@@ -86,4 +88,6 @@ def update_log(conn: MysqlEngine, s: int, f: int, role: str):
 
 
 if __name__ == '__main__':
-    synchronous_product(conn=CONN, products_api=PRODUCTS_API)
+    # synchronous_product(conn=CONN, products_api=PRODUCTS_API)
+    access_api = ACCESS_API.get_access_times()
+    print(access_api)

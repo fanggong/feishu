@@ -30,6 +30,7 @@ def synchronous_product(conn: MysqlEngine, products_api: ProductsApi):
         'updatedDatetime': 'update_at'
     }
     tmp = products_api.get_products()['data']
+
     dat = tmp['result']
     while len(tmp['result']) == int(tmp['pageSize']):
         tmp = products_api.get_products(post_back_param=tmp['postBackParameter'])['data']
