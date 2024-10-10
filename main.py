@@ -145,11 +145,11 @@ async def event_bar():
 #     return jsonify({'challenge': challenge}), 200
 #
 #
-# @app.route('/webhook-bar', methods=['POST'])
-# async def webhook_bar():
-#     data = await request.get_json()
-#     print(data)
-#     return jsonify({}), 200
+@app.route('/webhook-bar', methods=['POST'])
+async def webhook_bar():
+    data = await request.get_json()
+    print(data)
+    return jsonify({}), 200
 
 
 if __name__ == '__main__':
