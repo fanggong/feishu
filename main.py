@@ -138,18 +138,18 @@ async def event_bar():
     return jsonify({'message': 'Event received'}), 200
 
 
-@app.route('/webhook', methods=['POST'])
-async def webhook():
-    data = await request.get_json()
-    challenge = data.get('challenge')
-    return jsonify({'challenge': challenge}), 200
-
-
-@app.route('/webhook-bar', methods=['POST'])
-async def webhook_bar():
-    data = await request.get_json()
-    print(data)
-    return jsonify({}), 200
+# @app.route('/webhook', methods=['POST'])
+# async def webhook():
+#     data = await request.get_json()
+#     challenge = data.get('challenge')
+#     return jsonify({'challenge': challenge}), 200
+#
+#
+# @app.route('/webhook-bar', methods=['POST'])
+# async def webhook_bar():
+#     data = await request.get_json()
+#     print(data)
+#     return jsonify({}), 200
 
 
 if __name__ == '__main__':
