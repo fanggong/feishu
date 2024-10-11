@@ -12,3 +12,11 @@ class AccessApi(YinbaoClient):
             'appId': self.app_id
         }
         return self.request_with_params(c.POST, c.ACCESS_TIMES, params)
+
+    def get_daily_access_times_log(self, start_date, end_date):
+        params = {
+            'appId': self.app_id,
+            'beginDate': start_date,
+            'endDate': end_date
+        }
+        return self.request_with_params(c.POST, c.DAILY_ACCESS_TIMES_LOG, params)

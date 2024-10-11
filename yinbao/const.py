@@ -12,3 +12,4 @@ PRODUCTS = '/openapi/v1/productOpenApi/queryProductPages'
 CUSTOMERS = '/openapi/v1/customerOpenApi/queryCustomerPages'
 
 ACCESS_TIMES = '/openapi/v1/openApiLimitAccess/queryAccessTimes'
+DAILY_ACCESS_TIMES_LOG = '/openapi/v1/openApiLimitAccess/queryDailyAccessTimesLog'
