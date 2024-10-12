@@ -89,5 +89,5 @@ def update_log(conn: MysqlEngine, s: int, f: int, role: str):
 
 if __name__ == '__main__':
     # synchronous_product(conn=CONN, products_api=PRODUCTS_API)
-    tmp = ACCESS_API.get_daily_access_times_log(start_date='2024-10-11', end_date='2024-10-11')
+    tmp = ACCESS_API.get_daily_access_times_log(start_date='2024-10-12', end_date='2024-10-12')
     print(tmp)
