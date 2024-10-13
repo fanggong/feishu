@@ -156,7 +156,6 @@ async def event_bar():
 @app.route('/webhook-bar', methods=['POST'])
 async def webhook_bar():
     data = await request.get_json()
-    print(f'data: {data}')
     token = data['event']['token']
     form_values = data['event'].get('action').get('form_value')
     value = data['event'].get('action').get('value')
@@ -167,8 +166,6 @@ async def webhook_bar():
     tasks = {
         'sales_form': (update_sales_report, {'token': token, 'start_date': start_date, 'end_date': end_date})
     }
-    print(f'value: {value}')
-    print(tasks)
 
     task = tasks.get(value)
     if task:
