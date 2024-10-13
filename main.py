@@ -147,14 +147,16 @@ async def event_bar():
 #
 @app.route('/webhook-bar', methods=['POST'])
 async def webhook_bar():
-    data = await request.get_json()
-    res = {
+    info = {
         'toast': {
             'type': 'info',
-            'content': '卡片交互成功'
+            'content': 'Updating Graphs...'
         }
     }
-    return jsonify(res), 200
+    data = await request.get_json()
+    print(data)
+
+    return jsonify(info), 200
 
 
 if __name__ == '__main__':
