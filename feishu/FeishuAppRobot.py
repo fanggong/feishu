@@ -18,16 +18,38 @@ class FeishuAppRobot(FeishuClient):
             'msg_type': msg_type,
             'content': content
         }
-        request = BaseRequest.builder().http_method(lark.HttpMethod.POST)\
-            .uri('/open-apis/im/v1/messages')\
-            .queries([('receive_id_type', f'{receive_id_type}')])\
-            .token_types({lark.AccessTokenType.TENANT})\
-            .body(body)\
+        request = BaseRequest.builder().http_method(lark.HttpMethod.POST) \
+            .uri('/open-apis/im/v1/messages') \
+            .queries([('receive_id_type', f'{receive_id_type}')]) \
+            .token_types({lark.AccessTokenType.TENANT}) \
+            .body(body) \
             .build()
         response = self.client.request(request)
         if not response.success():
             lark.logger.error(
                 f'send message failed, '
+                f'code: {response.code}, '
+                f'msg: {response.msg}, '
+                f'log_id: {response.get_log_id()}'
+            )
+            return response
+        return lark.JSON.unmarshal(response.raw.content, dict)['data']
+
+
+    def update_card(self, token, card):
+        body = {
+            'token': token,
+            'card': card
+        }
+        request = BaseRequest.builder().http_method(lark.HttpMethod.POST) \
+            .uri('/open-apis/interactive/v1/card/update') \
+            .token_types({lark.AccessTokenType.TENANT}) \
+            .body(body) \
+            .build()
+        response = self.client.request(request)
+        if not response.success():
+            lark.logger.error(
+                f'update card failed, '
                 f'code: {response.code}, '
                 f'msg: {response.msg}, '
                 f'log_id: {response.get_log_id()}'

@@ -60,6 +60,19 @@ def send_interactive_card_to_my_self(robot: FeishuAppRobot, template_variable: s
     robot.send_msg(receive_id=MY_USER_ID, msg_type='interactive', content=content)
 
 
+def update_card(robot: FeishuAppRobot, token: str, template_variable: str, template_id: str,
+                template_version_name: str) -> None:
+    card = {
+        'type': 'template',
+        'data': {
+            'template_id': template_id,
+            'template_version_name': template_version_name,
+            'template_variable': template_variable
+        }
+    }
+    robot.update_card(token=token, card=card)
+
+
 def str_now() -> str:
     return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
