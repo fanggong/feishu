@@ -154,7 +154,7 @@ async def webhook_bar():
         }
     }
     data = await request.get_json()
-
+    print(data)
     FEISHU_APP_ROBOT_BAR.update_card(
         token=data['token'], card={
             'type': 'template',
@@ -168,7 +168,7 @@ async def webhook_bar():
         }
     )
 
-    print(data)
+
 
     return jsonify(info), 200
 
