@@ -156,14 +156,14 @@ async def webhook_bar():
     data = await request.get_json()
     print(data)
     FEISHU_APP_ROBOT_BAR.update_card(
-        token=data['token'], card={
+        token=data['event']['token'], card={
             'type': 'template',
             'data': {
                 'template_id': INTERACTIVE_CARD['sales_report']['id'],
                 'template_version_name': INTERACTIVE_CARD['sales_report']['version_name'],
                 'template_variable': datapush_sales_report(conn=CONN,
-                                                           start_date=data['action']['form_value']['start_date'][0:10],
-                                                           end_date=data['action']['form_value']['end_date'][0:10])
+                                                           start_date=data['event']['action']['form_value']['start_date'][0:10],
+                                                           end_date=data['event']['action']['form_value']['end_date'][0:10])
             }
         }
     )

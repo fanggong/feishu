@@ -18,3 +18,4 @@ PRODUCTS = 'products'
 TICKETS = 'tickets'
 TICKET_ITEMS = 'ticket_items'
 CALENDAR = 'calendar'
+
