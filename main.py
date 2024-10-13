@@ -168,6 +168,7 @@ async def webhook_bar():
         'sales_form': (update_sales_report, {'token': token, 'start_date': start_date, 'end_date': end_date})
     }
     print(f'value: {value}')
+    print(tasks)
 
     task = tasks.get(value)
     if task:
