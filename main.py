@@ -161,8 +161,8 @@ async def webhook_bar():
     form_values = data['event'].get('action').get('form_value')
     value = data['event'].get('action').get('value')
 
-    start_date = form_values.get('start_date')[0:10] if not form_values.get('start_date') else None
-    end_date = form_values.get('end_date')[0:10] if not form_values.get('end_date') else None
+    start_date = form_values.get('start_date')[0:10] if form_values.get('start_date') else None
+    end_date = form_values.get('end_date')[0:10] if form_values.get('end_date') else None
 
     tasks = {
         'sales_form': (update_sales_report, {'token': token, 'start_date': start_date, 'end_date': end_date})
