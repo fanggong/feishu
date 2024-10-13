@@ -36,7 +36,7 @@ class FeishuAppRobot(FeishuClient):
         return lark.JSON.unmarshal(response.raw.content, dict)['data']
 
 
-    def update_card(self, token, card):
+    async def update_card(self, token, card):
         body = {
             'token': token,
             'card': card
@@ -55,4 +55,4 @@ class FeishuAppRobot(FeishuClient):
                 f'log_id: {response.get_log_id()}'
             )
             return response
-        return lark.JSON.unmarshal(response.raw.content, dict)['data']
+        return lark.JSON.unmarshal(response.raw.content, dict)['msg']

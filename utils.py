@@ -105,9 +105,15 @@ if __name__ == '__main__':
     # tmp = ACCESS_API.get_daily_access_times_log(start_date='2024-10-12', end_date='2024-10-12')
     # print(tmp)
     # datapush_sales_report(conn=CONN, start_date='2024-10-01', end_date='2024-10-12')
-    send_interactive_card_to_my_self(
-        robot=FEISHU_APP_ROBOT_BAR,
-        template_variable=datapush_sales_report(conn=CONN, start_date='2024-10-01', end_date='2024-10-12'),
-        template_id=INTERACTIVE_CARD['sales_report']['id'],
-        template_version_name=INTERACTIVE_CARD['sales_report']['version_name']
+    FEISHU_APP_ROBOT_BAR.update_card(
+        token='c-d4731649ecbbcbd55953ac6495b53b04847f3d74', card={
+            'type': 'template',
+            'data': {
+                'template_id': INTERACTIVE_CARD['sales_report']['id'],
+                'template_version_name': INTERACTIVE_CARD['sales_report']['version_name'],
+                'template_variable': datapush_sales_report(conn=CONN,
+                                                           start_date='2024-10-01',
+                                                           end_date='2024-10-13')
+            }
+        }
     )

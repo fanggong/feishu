@@ -168,8 +168,6 @@ async def webhook_bar():
         }
     )
 
-
-
     return jsonify(info), 200
 
 
