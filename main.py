@@ -6,9 +6,9 @@ from typing import Callable
 app = Quart(__name__)
 
 
-async def run_in_back(sync_func: Callable):
+async def run_in_back(sync_func: Callable, **kwargs):
     loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, sync_func)
+    return await loop.run_in_executor(None, lambda: sync_func(**kwargs))
 
 
 def run_update_task(mission: str, task_func: Callable, robot: FeishuAppRobot, *args, **kwargs) -> int:
@@ -111,6 +111,21 @@ def handle_sales_report():
     )
 
 
+def update_sales_report(token, start_date, end_date):
+    template_id = INTERACTIVE_CARD['sales_report']['id']
+    template_version_name = INTERACTIVE_CARD['sales_report']['version_name']
+    template_variable = datapush_sales_report(conn=CONN, start_date=start_date, end_date=end_date)
+    card = {
+        'type': 'template',
+        'data': {
+            'template_id': template_id,
+            'template_version_name': template_version_name,
+            'template_variable': template_variable
+        }
+    }
+    FEISHU_APP_ROBOT_BAR.update_card(token=token, card=card)
+
+
 @app.route('/event', methods=['POST'])
 async def event():
     data = await request.get_json()
@@ -138,38 +153,31 @@ async def event_bar():
     return jsonify({'message': 'Event received'}), 200
 
 
+@app.route('/webhook-bar', methods=['POST'])
+async def webhook_bar():
+    data = await request.get_json()
+    token = data['event']['token']
+    form_values = data['event'].get('action').get('form_value')
+    value = data['event'].get('action').get('value')
+
+    start_date = form_values.get('start_date')[0:10] if not form_values.get('start_date') else None
+    end_date = form_values.get('end_date')[0:10] if not form_values.get('end_date') else None
+
+    tasks = {
+        'sales_form': (update_sales_report, {'token': token, 'start_date': start_date, 'end_date': end_date})
+    }
+
+    task = tasks.get(value)
+    if task:
+        asyncio.create_task(run_in_back(task[0], **task[1]))
+
+    return jsonify({}), 200
+
 # @app.route('/webhook', methods=['POST'])
 # async def webhook():
 #     data = await request.get_json()
 #     challenge = data.get('challenge')
 #     return jsonify({'challenge': challenge}), 200
-#
-#
-@app.route('/webhook-bar', methods=['POST'])
-async def webhook_bar():
-    info = {
-        'toast': {
-            'type': 'info',
-            'content': 'Updating Graphs...'
-        }
-    }
-    data = await request.get_json()
-    print(data)
-    FEISHU_APP_ROBOT_BAR.update_card(
-        token=data['event']['token'], card={
-            'type': 'template',
-            'data': {
-                'template_id': INTERACTIVE_CARD['sales_report']['id'],
-                'template_version_name': INTERACTIVE_CARD['sales_report']['version_name'],
-                'template_variable': datapush_sales_report(conn=CONN,
-                                                           start_date=data['event']['action']['form_value']['start_date'][0:10],
-                                                           end_date=data['event']['action']['form_value']['end_date'][0:10])
-            }
-        }
-    )
-
-    return jsonify(info), 200
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=11066)
