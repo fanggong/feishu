@@ -72,13 +72,13 @@ def synchronous_tickets(conn: MysqlEngine, sales_api: SalesApi, start_time: str,
             # 'name': 'name',
             'code': 'code',
             'amount': 'amount',
-            'tableNumber': 'table_number',
-            'tableName': 'table_name',
-            'tableUid': 'table_uid',
-            'tableAreaUid': 'table_area_uid',
-            'tableCardNo': 'table_card_no',
-            'peopleNum': 'people_num',
-            'spendOutStore': 'spend_out_store'
+            # 'tableNumber': 'table_number',
+            # 'tableName': 'table_name',
+            # 'tableUid': 'table_uid',
+            # 'tableAreaUid': 'table_area_uid',
+            # 'tableCardNo': 'table_card_no',
+            # 'peopleNum': 'people_num',
+            # 'spendOutStore': 'spend_out_store'
         }
         dat = pd.DataFrame(dat)
         dat = dat[columns.keys()]

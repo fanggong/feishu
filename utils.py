@@ -101,19 +101,8 @@ def update_log(conn: MysqlEngine, s: int, f: int, role: str):
 
 
 if __name__ == '__main__':
-    # synchronous_tickets(conn=CONN, sales_api=SALES_API, start_time='2024-10-11 13:30:00', end_time='2024-10-12 13:30:00')
+    synchronous_tickets(conn=CONN, sales_api=SALES_API, start_time='2024-10-11 04:00:00', end_time='2024-10-14 16:30:00')
     # tmp = ACCESS_API.get_daily_access_times_log(start_date='2024-10-12', end_date='2024-10-12')
     # print(tmp)
     # datapush_sales_report(conn=CONN, start_date='2024-10-01', end_date='2024-10-12')
-    FEISHU_APP_ROBOT_BAR.update_card(
-        token='c-d4731649ecbbcbd55953ac6495b53b04847f3d74', card={
-            'type': 'template',
-            'data': {
-                'template_id': INTERACTIVE_CARD['sales_report']['id'],
-                'template_version_name': INTERACTIVE_CARD['sales_report']['version_name'],
-                'template_variable': datapush_sales_report(conn=CONN,
-                                                           start_date='2024-10-01',
-                                                           end_date='2024-10-13')
-            }
-        }
-    )
+
