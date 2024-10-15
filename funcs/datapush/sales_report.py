@@ -95,11 +95,19 @@ def datapush_sales_report(conn: MysqlEngine, start_date=None, end_date=None):
         ]
     }
 
+    sql = f'''
+    select max(update_at) update_at
+    from update_log
+    where role = 'BC'
+    '''
+    update_at = conn.fetch_dat(sql).update_at[0].strftime('%Y-%m-%d %H:%M:%S')
+
     res = {
         'start_date': start_date,
         'end_date': end_date,
         'graph_sales': graph_sales,
         'graph_number': graph_number,
-        'graph_atv': graph_atv
+        'graph_atv': graph_atv,
+        'update_at': update_at
     }
     return res
