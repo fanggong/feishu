@@ -13,13 +13,13 @@ def datapush_crypto_report(conn: MysqlEngine):
         ,eq * coalesce(mark_px, 1) value
     from (
         select ccy, eq  
-        from balance 
+        from {BALANCE} 
     ) src
     left join (
         select 
             regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
             ,mark_px
-        from mark_price 
+        from {MARK_PRICE} 
         where inst_type = 'MARGIN'
             and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
     ) mp on src.ccy = mp.ccy
@@ -38,20 +38,20 @@ def datapush_crypto_report(conn: MysqlEngine):
             ,inst_id 
             ,inst_type
             ,pos
-        from positions
+        from {POSITIONS}
     ) src
     left join (
         select 
             inst_id
             ,inst_type
             ,ct_val
-        from instruments i 
+        from {INSTRUMENTS} 
     ) ins on src.inst_id = ins.inst_id and src.inst_type = ins.inst_type
     left join (
         select 
             regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
             ,mark_px
-        from mark_price 
+        from {MARK_PRICE} 
         where inst_type = 'MARGIN'
             and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
     ) mp on src.ccy = mp.ccy
@@ -66,13 +66,13 @@ def datapush_crypto_report(conn: MysqlEngine):
         ,upl * coalesce(mark_px, 1) upl_usdt
     from (
         select ccy, upl
-        from positions 
+        from {POSITIONS} 
     ) src
     left join (
         select 
             regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
             ,mark_px
-        from mark_price 
+        from {MARK_PRICE} 
         where inst_type = 'MARGIN'
             and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
     ) mp on src.ccy = mp.ccy
@@ -99,7 +99,7 @@ def datapush_crypto_report(conn: MysqlEngine):
                 ,0 withdraw
                 ,0 c2c_buy
                 ,0 c2c_sell
-            from deposit_history
+            from {DEPOSIT_HISTORY}
             where state = 2
             group by ccy
             union all
@@ -109,7 +109,7 @@ def datapush_crypto_report(conn: MysqlEngine):
                 ,sum(amt) withdraw
                 ,0 c2c_buy
                 ,0 c2c_sell
-            from withdraw_history
+            from {WITHDRAW_HISTORY}
             where state = 2
             group by ccy
             union all
@@ -119,7 +119,7 @@ def datapush_crypto_report(conn: MysqlEngine):
                 ,0 withdraw
                 ,sum(if(side = 'buy', amt, 0)) c2c_buy
                 ,sum(if(side = 'sell', amt, 0)) c2c_sell
-            from c2c
+            from {C2C}
         ) src
         group by ccy
     ) src
@@ -127,7 +127,7 @@ def datapush_crypto_report(conn: MysqlEngine):
         select 
             regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
             ,mark_px
-        from mark_price 
+        from {MARK_PRICE} 
         where inst_type = 'MARGIN'
             and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
     ) mp on src.ccy = mp.ccy
@@ -143,14 +143,14 @@ def datapush_crypto_report(conn: MysqlEngine):
         select 
             ccy
             ,imr 
-        from positions
+        from {POSITIONS}
         where inst_type = 'MARGIN'
     ) src
     left join (
         select 
             regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
             ,mark_px
-        from mark_price 
+        from {MARK_PRICE} 
         where inst_type = 'MARGIN'
             and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
     ) mp on src.ccy = mp.ccy
@@ -161,15 +161,15 @@ def datapush_crypto_report(conn: MysqlEngine):
     select 
         ccy
         ,margin 
-    from positions p 
+    from {POSITIONS} 
     where inst_type = 'SWAP'
     '''
     contract_flow = conn.fetch_dat(sql)
 
     sql = f'''
     select max(update_at) update_at
-    from update_log
-    where role = 'LongQi'
+    from {UPDATE_LOG}
+    where role = '{CRYPTO_APP_NAME}'
     '''
     update_at = conn.fetch_dat(sql).update_at[0].strftime('%Y-%m-%d %H:%M:%S')
 

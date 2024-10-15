@@ -18,12 +18,12 @@ def datapush_risk_report(conn: MysqlEngine):
             ,avg_px 
             ,pos
             ,round(lever, 0)  lever
-        from positions p 
+        from {POSITIONS} 
         where inst_type = 'SWAP'
     ) src
     left join (
         select inst_id, ct_val
-        from instruments
+        from {INSTRUMENTS}
     ) ins on src.inst_id = ins.inst_id 
     order by margin desc
     '''
@@ -41,18 +41,18 @@ def datapush_risk_report(conn: MysqlEngine):
             regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
             ,-liab liab
             ,round(lever, 0) lever
-        from positions p 
+        from {POSITIONS}
         where inst_type = 'MARGIN'
     ) src
     left join (
         select ccy, eq
-        from balance
+        from {BALANCE}
     ) bal on src.ccy = bal.ccy
     left join (
         select 
             regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
             ,mark_px
-        from mark_price 
+        from {MARK_PRICE} 
         where inst_type = 'MARGIN'
             and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
     ) mp on src.ccy = mp.ccy
@@ -64,8 +64,8 @@ def datapush_risk_report(conn: MysqlEngine):
 
     sql = f'''
     select max(update_at) update_at
-    from update_log
-    where role = 'LongQi'
+    from {UPDATE_LOG}
+    where role = '{CRYPTO_APP_NAME}'
     '''
     update_at = conn.fetch_dat(sql).update_at[0].strftime('%Y-%m-%d %H:%M:%S')
 

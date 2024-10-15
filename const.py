@@ -1,4 +1,5 @@
 from config import *
+from funcs import *
 
 MAX_RETRY = 5
 
@@ -10,8 +11,6 @@ INTERACTIVE_CARD = {
 }
 
 # feishu app
-CRYPTO_APP_NAME = 'LongQi'
-BAR_APP_NAME = 'BC'
 APP_ID_CRYPTO = FEISHU_CONFIG['crypto']['app_id']
 APP_SECRET_CRYPTO = FEISHU_CONFIG['crypto']['app_secret']
 APP_ID_BAR = FEISHU_CONFIG['bar']['app_id']

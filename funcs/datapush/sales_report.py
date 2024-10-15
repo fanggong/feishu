@@ -97,8 +97,8 @@ def datapush_sales_report(conn: MysqlEngine, start_date=None, end_date=None):
 
     sql = f'''
     select max(update_at) update_at
-    from update_log
-    where role = 'BC'
+    from {UPDATE_LOG}
+    where role = '{BAR_APP_NAME}'
     '''
     update_at = conn.fetch_dat(sql).update_at[0].strftime('%Y-%m-%d %H:%M:%S')
 

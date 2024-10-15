@@ -11,6 +11,7 @@ FILLS_HISTORY = 'fills_history'
 MARK_PRICE = 'mark_price'
 POSITIONS = 'positions'
 WITHDRAW_HISTORY = 'withdraw_history'
+C2C = 'c2c'
 
 # bar
 CUSTOMERS = 'customers'
@@ -19,3 +20,7 @@ TICKETS = 'tickets'
 TICKET_ITEMS = 'ticket_items'
 CALENDAR = 'calendar'
 
+
+# app
+CRYPTO_APP_NAME = 'LongQi'
+BAR_APP_NAME = 'BC'
