@@ -1,13 +1,9 @@
 from sqlalchemy import create_engine, text, MetaData, Table
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.dialects.mysql import insert
 from .utils import *
 
 import pandas as pd
 import numpy as np
-import logging
-import functools
-import time
 
 
 class MysqlEngine:
