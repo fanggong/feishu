@@ -4,7 +4,6 @@ from database.Mysql import MysqlEngine
 from okx.Account import AccountAPI
 
 
-
 def synchronous_positions(conn: MysqlEngine, account_api: AccountAPI, **kwargs):
     columns = {
         'adl': 'adl',

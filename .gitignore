@@ -5,7 +5,6 @@
 __pycache__/*
 .idea/*
 
-config.py
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
@@ -200,3 +199,6 @@ result/
 tmp*.py
 
 data/*
+
+config.yml
+config_x.py
