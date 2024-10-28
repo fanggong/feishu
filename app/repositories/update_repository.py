@@ -1,7 +1,7 @@
 from app.database.mysql import db_session
 from app.models.update_logs import UpdateLogs
 from app.services.update_strategy import UpdateStrategy
-from sqlalchemy import insert
+from sqlalchemy.dialects.mysql import insert
 from datetime import datetime
 
 
@@ -48,7 +48,6 @@ class UpdateRepository:
 
                 # 执行插入或更新
                 session.execute(insert_stmt.on_duplicate_key_update(**update_stmt))
-
             session.commit()
         except Exception as e:
             session.rollback()  # 回滚事务

@@ -12,6 +12,7 @@ from app.models.positions import Positions
 from app.services.sync_service import SyncService
 from app.services.crypto_report import CryptoReportService
 from app.services.risk_report import RiskReportService
+import time
 
 
 def handle_crypto_update():
@@ -20,6 +21,7 @@ def handle_crypto_update():
 
     msg_service.send_text_message(receive_id=receive_id, content='Starting data update')
     start_time = (datetime.now() - timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')
+    start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
 
     tasks = [
         ('single', Balance, Balance.update_strategy),

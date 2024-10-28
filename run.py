@@ -10,10 +10,17 @@ from app.repositories.update_repository import UpdateRepository
 from app.services.update_strategy import UpdateStrategy
 from app.controller.handle_crypto_event import CryptoReportService
 from app.models.balance import Balance
+from app.models.bills_history import BillsHistory
 from app.services.sync_service import SyncService
 from app.models.products import Products
+from app.models.deposit_history import DepositHistory
+from datetime import datetime, timedelta
+import time
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=11066)
-    # SyncService.update_table(Balance, Balance.update_strategy)
-
+    # start_time = (datetime.now() - timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')
+    # start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
+    # SyncService.update_table(BillsHistory, BillsHistory.update_strategy, begin=start_time)
+    # SyncService.update_table(DepositHistory, DepositHistory.update_strategy)
