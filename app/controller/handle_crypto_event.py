@@ -20,19 +20,18 @@ def handle_crypto_update():
 
     msg_service.send_text_message(receive_id=receive_id, content='Starting data update')
     start_time = (datetime.now() - timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')
-    end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     tasks = [
         ('single', Balance, Balance.update_strategy),
         ('single', BillsHistory, BillsHistory.update_strategy, {'begin': start_time}),
         ('single', DepositHistory, DepositHistory.update_strategy),
-        # ('single', WithdrawHistory, WithdrawHistory.update_strategy),
-        # ('single', Instruments, Instruments.update_strategy, {'instType': 'SPOT'}),
-        # ('single', Instruments, Instruments.update_strategy, {'instType': 'SWAP'}),
-        # ('single', Instruments, Instruments.update_strategy, {'instType': 'MARGIN'}),
-        # ('single', MarkPrice, MarkPrice.update_strategy, {'instType': 'SWAP'}),
-        # ('single', MarkPrice, MarkPrice.update_strategy, {'instType': 'MARGIN'}),
-        # ('single', Positions, Positions.update_strategy)
+        ('single', WithdrawHistory, WithdrawHistory.update_strategy),
+        ('single', Instruments, Instruments.update_strategy, {'instType': 'SPOT'}),
+        ('single', Instruments, Instruments.update_strategy, {'instType': 'SWAP'}),
+        ('single', Instruments, Instruments.update_strategy, {'instType': 'MARGIN'}),
+        ('single', MarkPrice, MarkPrice.update_strategy, {'instType': 'SWAP'}),
+        ('single', MarkPrice, MarkPrice.update_strategy, {'instType': 'MARGIN'}),
+        ('single', Positions, Positions.update_strategy)
     ]
     for task_type, table_class, strategy, *extra_params in tasks:
         try:
@@ -58,12 +57,13 @@ def handle_crypto_update():
 def handle_crypto_report():
     receive_id = Config.get_user_id('Fang Yongchao')
     msg_service = MessageService(FeishuAppRobot(**Config.get_crypto_robot()))
+    crs = CryptoReportService()
 
     msg_service.send_text_message(receive_id=receive_id, content='Finance Report Generating')
 
     msg_service.send_interactive_card(
-        receive_id=receive_id, template_id=CryptoReportService.id, template_variable=CryptoReportService.report(),
-        template_version_name=CryptoReportService.version_name
+        receive_id=receive_id, template_id=crs.id, template_variable=crs.report(),
+        template_version_name=crs.version_name
     )
 
 
