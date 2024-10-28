@@ -15,4 +15,5 @@ from app.models.products import Products
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=11066)
+    # SyncService.update_table(Balance, Balance.update_strategy)
 

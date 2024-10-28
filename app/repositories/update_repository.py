@@ -39,21 +39,16 @@ class UpdateRepository:
         """
         session = db_session()
         try:
-            primary_key_columns = [key.name for key in table_class.__mapper__.primary_key]
-
             for data in data_list:
-                # 创建过滤条件
-                primary_key_filter = {key: data[key] for key in primary_key_columns}
-                existing_record = session.query(table_class).filter_by(**primary_key_filter).first()
+                # 使用 SQLAlchemy 提供的 insert 构造
+                insert_stmt = insert(table_class).values(**data)
 
-                if existing_record:
-                    # 如果记录存在，更新所有字段
-                    for key, value in data.items():
-                        setattr(existing_record, key, value)
-                else:
-                    # 如果记录不存在，则插入新记录
-                    new_record = table_class(**data)
-                    session.add(new_record)
+                # 构造 ON DUPLICATE KEY UPDATE 部分
+                update_stmt = {key: insert_stmt.inserted[key] for key in data}
+
+                # 执行插入或更新
+                session.execute(insert_stmt.on_duplicate_key_update(**update_stmt))
+
             session.commit()
         except Exception as e:
             session.rollback()  # 回滚事务
