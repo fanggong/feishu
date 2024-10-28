@@ -1,5 +1,5 @@
 from app.services.data_fetcher import DataFetcher
-from yinbao.Sales import SalesApi
+from app.yinbao.Sales import SalesApi
 from app.config import Config
 from itertools import chain
 

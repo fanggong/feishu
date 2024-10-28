@@ -1,5 +1,5 @@
 from app.services.data_fetcher import DataFetcher
-from yinbao.Customers import CustomersApi
+from app.yinbao.Customers import CustomersApi
 from app.config import Config
 
 

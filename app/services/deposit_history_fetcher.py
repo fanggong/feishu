@@ -1,5 +1,5 @@
 from app.services.data_fetcher import DataFetcher
-from okx.Funding import FundingAPI
+from app.okx.Funding import FundingAPI
 from app.config import Config
 import time
 

@@ -1,5 +1,5 @@
 from app.services.data_fetcher import DataFetcher
-from okx.Account import AccountAPI
+from app.okx.Account import AccountAPI
 from app.config import Config
 
 

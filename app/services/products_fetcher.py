@@ -1,6 +1,6 @@
 from app.services.data_fetcher import DataFetcher
 from app.config import Config
-from yinbao.Products import ProductsApi
+from app.yinbao.Products import ProductsApi
 
 
 class ProductsFetcher(DataFetcher):

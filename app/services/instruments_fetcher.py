@@ -1,5 +1,5 @@
 from app.services.data_fetcher import DataFetcher
-from okx.PublicData import PublicAPI
+from app.okx.PublicData import PublicAPI
 from app.config import Config
 
 
