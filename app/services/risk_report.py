@@ -72,7 +72,7 @@ class RiskReportService(ReportService):
         sql = f'''
             select max(update_at) update_at
             from {UpdateLogs.__tablename__}
-            where role = 'bar'
+            where scope = 'bar'
             '''
         update_at = QueryRepository.fetch_df_dat(sql).iloc[0, 0].strftime('%Y-%m-%d %H:%M:%S')
 
