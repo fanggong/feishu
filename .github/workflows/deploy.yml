@@ -32,6 +32,7 @@ jobs:
           script: |
             cd /srv/feishu
             cp /root/config.yml /srv/feishu/config.yml
+            cp /root/run.py /srv/feishu/run.py
             conda activate feishu
             conda env update --file environment.yml --prune
             chmod +x deploy.sh
