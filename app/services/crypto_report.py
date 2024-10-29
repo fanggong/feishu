@@ -183,6 +183,7 @@ class CryptoReportService(ReportService):
             and scope = 'crypto'
         '''
         update_at = QueryRepository.fetch_df_dat(sql)
+        update_at = update_at.iloc[0, 0].strftime('%Y-%m-%d %H:%M:%S')
 
         equity = spot_asset.value.sum()
         nav = equity + derivative_asset.value.sum()
@@ -202,7 +203,7 @@ class CryptoReportService(ReportService):
             'contract_flow': self.format_number(contract_flow.margin.sum(), 2),
             'margin_flow': self.format_number(margin_flow.imr_usdt.sum(), 2),
             'free_flow': self.format_number(equity - contract_flow.margin.sum() - margin_flow.imr_usdt.sum(), 2),
-            'update_at': update_at.iloc[0, 0],
+            'update_at': update_at,
             'asset': asset_format
         }
         return res
