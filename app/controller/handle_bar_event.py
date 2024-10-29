@@ -41,10 +41,11 @@ def handle_bar_update():
 def handle_sales_report():
     receive_id = Config.get_user_id('Fang Yongchao')
     msg_service = MessageService(FeishuAppRobot(**Config.get_bar_robot()))
+    srs = SalesReportService()
 
     msg_service.send_text_message(receive_id=receive_id, content='Sales Report Generating')
 
     msg_service.send_interactive_card(
-        receive_id=receive_id, template_id=SalesReportService.id, template_variable=SalesReportService.report(),
-        template_version_name=SalesReportService.version_name
+        receive_id=receive_id, template_id=srs.id, template_variable=srs.report(),
+        template_version_name=srs.version_name
     )
