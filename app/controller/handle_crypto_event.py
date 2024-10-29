@@ -20,7 +20,7 @@ def handle_crypto_update():
     msg_service = MessageService(FeishuAppRobot(**Config.get_crypto_robot()))
 
     msg_service.send_text_message(receive_id=receive_id, content='Starting data update')
-    start_time = (datetime.now() - timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')
+    start_time = (datetime.now() - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')
     start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
 
     tasks = [
@@ -72,10 +72,11 @@ def handle_crypto_report():
 def handle_risk_report():
     receive_id = Config.get_user_id('Fang Yongchao')
     msg_service = MessageService(FeishuAppRobot(**Config.get_crypto_robot()))
+    rrs = RiskReportService()
 
     msg_service.send_text_message(receive_id=receive_id, content='Risk Report Generating')
 
     msg_service.send_interactive_card(
-        receive_id=receive_id, template_id=RiskReportService.id, template_variable=RiskReportService.report(),
-        template_version_name=RiskReportService.version_name
+        receive_id=receive_id, template_id=rrs.id, template_variable=rrs.report(),
+        template_version_name=rrs.version_name
     )

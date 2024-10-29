@@ -15,7 +15,7 @@ def handle_bar_update():
     msg_service = MessageService(FeishuAppRobot(**Config.get_bar_robot()))
 
     msg_service.send_text_message(receive_id=receive_id, content='Starting data update')
-    start_time = (datetime.now() - timedelta(hours=1.5)).strftime('%Y-%m-%d %H:%M:%S')
+    start_time = (datetime.now() - timedelta(hours=6)).strftime('%Y-%m-%d %H:%M:%S')
     end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     tasks = [

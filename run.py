@@ -21,8 +21,9 @@ import time
 
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=11066)
-    start_time = (datetime.now() - timedelta(hours=24)).strftime('%Y-%m-%d %H:%M:%S')
-    start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
-    SyncService.update_table(BillsHistory, BillsHistory.update_strategy, begin=start_time)
+    # start_time = (datetime.now() - timedelta(hours=24)).strftime('%Y-%m-%d %H:%M:%S')
+    # start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
+    # SyncService.update_table(BillsHistory, BillsHistory.update_strategy, begin=start_time)
     # SyncService.update_table(DepositHistory, DepositHistory.update_strategy)
     # SyncService.update_table(Instruments, Instruments.update_strategy, instType='SPOT')
+    SyncService.update_table(Products, Products.update_strategy)
