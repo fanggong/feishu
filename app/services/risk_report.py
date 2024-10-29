@@ -59,7 +59,7 @@ class RiskReportService(ReportService):
                 select 
                     regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
                     ,mark_px
-                from {MarkPrice} 
+                from {MarkPrice.__tablename__} 
                 where inst_type = 'MARGIN'
                     and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
             ) mp on src.ccy = mp.ccy
