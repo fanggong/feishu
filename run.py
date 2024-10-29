@@ -16,6 +16,7 @@ from app.models.products import Products
 from app.models.instruments import Instruments
 from app.models.deposit_history import DepositHistory
 from datetime import datetime, timedelta
+from app.services.sales_report import SalesReportService
 import time
 
 
@@ -26,4 +27,15 @@ if __name__ == '__main__':
     # SyncService.update_table(BillsHistory, BillsHistory.update_strategy, begin=start_time)
     # SyncService.update_table(DepositHistory, DepositHistory.update_strategy)
     # SyncService.update_table(Instruments, Instruments.update_strategy, instType='SPOT')
-    SyncService.update_table(Products, Products.update_strategy)
+    # SyncService.update_table(Products, Products.update_strategy)
+    receive_id = Config.get_user_id('Fang Yongchao')
+    msg_service = MessageService(FeishuAppRobot(**Config.get_bar_robot()))
+    srs = SalesReportService()
+
+    msg_service.send_text_message(receive_id=receive_id, content='Sales Report Generating')
+
+    msg_service.send_interactive_card(
+        receive_id=receive_id, template_id=srs.id, template_variable=srs.report(),
+        template_version_name=srs.version_name
+    )
+

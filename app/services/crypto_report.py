@@ -13,7 +13,7 @@ import pandas as pd
 
 class CryptoReportService(ReportService):
     id = 'AAq7F02QhXIfo'
-    version_name = '1.0.10'
+    version_name = '1.0.11'
 
     def report(self):
         sql = f'''

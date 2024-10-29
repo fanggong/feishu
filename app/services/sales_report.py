@@ -8,7 +8,7 @@ from app.models.update_logs import UpdateLogs
 
 class SalesReportService(ReportService):
     id = 'AAq7QaZZ15OqP'
-    version_name = '1.0.14'
+    version_name = '1.0.15'
 
     def report(self, start_date=None, end_date=None):
         start_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d') if not start_date else start_date
@@ -48,71 +48,46 @@ class SalesReportService(ReportService):
             'data': {
                 'values': dat[['order_date', 'sales']].to_dict(orient='records')
             },
-            'xField': 'order_date',
-            'yField': 'sales',
+            'direction': 'horizontal',
+            'xField': 'sales',
+            'yField': 'order_date',
             'axes': [
                 {
                     'orient': 'bottom',
+                    'title': 'Sales Amount',
+                    'grid': True
+                },
+                {
+                    'orient': 'left',
+                    'title': 'Time',
+                    'grid': True,
                     'label': {
-                        'autoRotate': False
+                        'align': 'left'  # 将 Y 轴的标签左对齐
                     }
                 }
-            ]
+            ],
+            'label': {
+                'position': 'inside',
+                'smartInvert': False
+            },
+            'bar': {
+                'barWidth': 20,  # 柱子的宽度
+                'cornerRadius': [4, 4, 0, 0]  # 柱子的圆角
+            }
         }
 
-        graph_number = {
-            'type': 'bar',
-            'title': {
-                'text': 'Order Size'
-            },
-            'data': {
-                'values': dat[['order_date', 'order_number']].to_dict(orient='records')
-            },
-            'xField': 'order_date',
-            'yField': 'order_number',
-            'axes': [
-                {
-                    'orient': 'bottom',
-                    'label': {
-                        'autoRotate': False
-                    }
-                }
-            ]
-        }
-
-        graph_atv = {
-            'type': 'bar',
-            'title': {
-                'text': 'ATV'
-            },
-            'data': {
-                'values': dat[['order_date', 'atv']].to_dict(orient='records')
-            },
-            'xField': 'order_date',
-            'yField': 'atv',
-            'axes': [
-                {
-                    'orient': 'bottom',
-                    'label': {
-                        'autoRotate': False
-                    }
-                }
-            ]
-        }
 
         sql = f'''
-            select max(update_at) update_at
-            from {UpdateLogs.__tablename__}
-            where scope = 'bar'
-            '''
+        select max(update_at) update_at
+        from {UpdateLogs.__tablename__}
+        where scope = 'bar'
+        '''
         update_at = QueryRepository.fetch_df_dat(sql).iloc[0, 0].strftime('%Y-%m-%d %H:%M:%S')
 
         res = {
             'start_date': start_date,
             'end_date': end_date,
             'graph_sales': graph_sales,
-            'graph_number': graph_number,
-            'graph_atv': graph_atv,
             'update_at': update_at
         }
         return res

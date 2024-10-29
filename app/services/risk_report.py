@@ -9,7 +9,7 @@ from app.repositories.query_repository import QueryRepository
 
 class RiskReportService(ReportService):
     id = 'AAq7xvyDvK3WX'
-    version_name = '1.0.3'
+    version_name = '1.0.4'
 
     def report(self):
         sql = f'''
