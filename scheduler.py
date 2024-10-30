@@ -3,6 +3,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 import atexit
 from app.services.tasks import Tasks
 from app.services.sync_service import SyncService
+from datetime import datetime, timedelta
 
 
 def sync_crypto_task():
@@ -29,17 +30,18 @@ def sync_bar_task():
 scheduler = BackgroundScheduler()
 scheduler.start()
 
+first_start = datetime.now() + timedelta(minutes=5)
 
 scheduler.add_job(
     func=sync_crypto_task,
-    trigger=IntervalTrigger(minutes=20),
+    trigger=IntervalTrigger(minutes=20, start_date=first_start),
     id='crypto data',
     replace_existing=True
 )
 
 scheduler.add_job(
     func=sync_bar_task(),
-    trigger=IntervalTrigger(hours=1),
+    trigger=IntervalTrigger(hours=1, start_date=first_start),
     id='bar data',
     replace_existing=True
 )
