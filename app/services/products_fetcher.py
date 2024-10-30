@@ -1,9 +1,11 @@
 from app.services.data_fetcher import DataFetcher
 from app.config import Config
 from app.yinbao.Products import ProductsApi
+from app.utils.decorators import retry
 
 
 class ProductsFetcher(DataFetcher):
+    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
     def fetch_data(self, **kwargs):
         products_api = ProductsApi(**Config.get_yinbao_keys())
         tmp = products_api.get_products()

@@ -2,9 +2,11 @@ from app.services.data_fetcher import DataFetcher
 from app.yinbao.Sales import SalesApi
 from app.config import Config
 from itertools import chain
+from app.utils.decorators import retry
 
 
 class TicketsFetcher(DataFetcher):
+    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
     def fetch_data(self, start_time, end_time):
         sales_api = SalesApi(**Config.get_yinbao_keys())
         tmp = sales_api.get_tickets(start_time=start_time, end_time=end_time)
