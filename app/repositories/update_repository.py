@@ -10,7 +10,7 @@ from app.utils.decorators import retry
 
 class UpdateRepository:
     @staticmethod
-    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
+    @retry(max_retries=5, delay=10, exceptions=(TimeoutError, ConnectionError))
     def full_update(table_class, data_list):
         """
         全量更新：删除表中所有数据，插入新数据
@@ -36,7 +36,7 @@ class UpdateRepository:
             db_session.remove()  # 移除会话
 
     @staticmethod
-    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
+    @retry(max_retries=5, delay=10, exceptions=(TimeoutError, ConnectionError))
     def incremental_update(table_class, data_list):
         """
         增量更新：根据主键来判断，存在则更新，不存在则插入

@@ -32,7 +32,7 @@ def sync_bar_task():
 scheduler = BackgroundScheduler()
 scheduler.start()
 
-first_start = datetime.now() + timedelta(seconds=30)
+first_start = datetime.now() + timedelta(minutes=10)
 
 scheduler.add_job(
     func=sync_crypto_task,

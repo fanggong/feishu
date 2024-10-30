@@ -21,7 +21,7 @@ import time
 # handle = logging.StreamHandler()
 # handle.setLevel(logging.INFO)
 # logger.addHandler(handle)
-import scheduler
+# import scheduler
 
 
 if __name__ == '__main__':
