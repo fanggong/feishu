@@ -1,9 +1,12 @@
+import time
+
 from app.database.mysql import db_session
 from app.models.update_logs import UpdateLogs
 from app.services.update_strategy import UpdateStrategy
 from sqlalchemy.dialects.mysql import insert
 from datetime import datetime
 from app.utils.decorators import retry
+import thread
 
 
 class UpdateRepository:
@@ -23,6 +26,7 @@ class UpdateRepository:
 
             # 插入新数据
             for data in data_list:
+                time.sleep(0)
                 new_record = table_class(**data)
                 session.add(new_record)
             session.commit()
@@ -43,6 +47,7 @@ class UpdateRepository:
         session = db_session()
         try:
             for data in data_list:
+                time.sleep(0)
                 # 使用 SQLAlchemy 提供的 insert 构造
                 insert_stmt = insert(table_class).values(**data)
 

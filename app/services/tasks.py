@@ -16,8 +16,8 @@ class Tasks:
             ('single', DepositHistory, DepositHistory.update_strategy),
             ('single', WithdrawHistory, WithdrawHistory.update_strategy),
             # ('single', Instruments, Instruments.update_strategy, {'instType': 'SPOT'}),
-            ('single', Instruments, Instruments.update_strategy, {'instType': 'SWAP'}),
-            ('single', Instruments, Instruments.update_strategy, {'instType': 'MARGIN'}),
+            # ('single', Instruments, Instruments.update_strategy, {'instType': 'SWAP'}),
+            # ('single', Instruments, Instruments.update_strategy, {'instType': 'MARGIN'}),
             ('single', MarkPrice, MarkPrice.update_strategy, {'instType': 'SWAP'}),
             ('single', MarkPrice, MarkPrice.update_strategy, {'instType': 'MARGIN'}),
             ('single', Positions, Positions.update_strategy)
