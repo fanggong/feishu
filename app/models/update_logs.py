@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DECIMAL, Integer, DateTime, Text
+from sqlalchemy import Column, String, DECIMAL, Integer, DateTime, Text, BigInteger
 from app.database.mysql import Base
 from app.services.update_strategy import UpdateStrategy
 
@@ -7,6 +7,7 @@ class UpdateLogs(Base):
     __scope__ = 'log'
     __tablename__ = 'update_logs'
 
+    id = Column(BigInteger, primary_key=True, autoincrement=True, nullable=False, comment='自增ID')
     scope = Column(String(255), nullable=True, default='', comment='crypto | bar')
     table = Column(String(255), primary_key=True, nullable=True, default='', comment='表名')
     operation = Column(String(255), nullable=True, default='', comment='更新策略')
@@ -17,4 +18,4 @@ class UpdateLogs(Base):
     update_strategy = None
 
     def __repr__(self):
-        return f"<Tickets(uid='{self.uid}', datetime='{self.datetime}')>"
+        return f"<UpdateLogs(id='{self.id}')>"

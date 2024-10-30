@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 
 
 def sync_crypto_task():
+    print('sync crypto task begin')
     tasks = Tasks.get_crypto_update_tasks()
     for task_type, table_class, strategy, *extra_params in tasks:
         additional_args = extra_params[0] if extra_params else {}
@@ -17,6 +18,7 @@ def sync_crypto_task():
 
 
 def sync_bar_task():
+    print('sync bar task begin')
     tasks = Tasks.get_bar_update_tasks()
     for task_type, table_class, strategy, *extra_params in tasks:
         additional_args = extra_params[0] if extra_params else {}
@@ -30,20 +32,24 @@ def sync_bar_task():
 scheduler = BackgroundScheduler()
 scheduler.start()
 
-first_start = datetime.now() + timedelta(seconds=20)
+first_start = datetime.now() + timedelta(seconds=30)
 
 scheduler.add_job(
     func=sync_crypto_task,
     trigger=IntervalTrigger(minutes=20, start_date=first_start),
     id='crypto data',
-    replace_existing=True
+    replace_existing=True,
+    coalesce=True,
+    max_instances=1
 )
 
 scheduler.add_job(
     func=sync_bar_task,
     trigger=IntervalTrigger(hours=1, start_date=first_start),
     id='bar data',
-    replace_existing=True
+    replace_existing=True,
+    coalesce=True,
+    max_instances=1
 )
 
 # 在程序退出时关闭调度器

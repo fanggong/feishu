@@ -1,6 +1,6 @@
 from quart import Quart
 from app.routes import crypto, bar
-import scheduler
+
 
 app = Quart(__name__)
 
