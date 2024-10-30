@@ -1,5 +1,5 @@
 from app.models.balance import Balance
-from app.models.balance_on_chain import BalanceOnChain
+# from app.models.balance_on_chain import BalanceOnChain
 from app.models.bills_history import BillsHistory
 from app.models.c2c import C2C
 from app.models.calendar import Calendar
