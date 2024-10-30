@@ -1,7 +1,7 @@
 
 from quart import request, jsonify, Blueprint
 import asyncio
-from .utils import run_in_back
+from app.utils.run_async import run_in_back
 from app.controller.handle_crypto_event import *
 
 bp = Blueprint('crypto', __name__)

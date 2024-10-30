@@ -1,8 +1,8 @@
 from quart import request, jsonify, Blueprint
 import asyncio
-from .utils import run_in_back
 from app.controller.handle_bar_event import handle_bar_update, handle_sales_report
 from app.controller.handle_bar_webhook import update_sales_report
+from app.utils.run_async import run_in_back
 
 bp = Blueprint('bar', __name__)
 
