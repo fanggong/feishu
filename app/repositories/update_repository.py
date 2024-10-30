@@ -6,7 +6,6 @@ from app.services.update_strategy import UpdateStrategy
 from sqlalchemy.dialects.mysql import insert
 from datetime import datetime
 from app.utils.decorators import retry
-import thread
 
 
 class UpdateRepository:
