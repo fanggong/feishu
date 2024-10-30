@@ -1,12 +1,8 @@
 from app.services.sync_service import SyncService
 from app.services.message_service import MessageService
-from app.models.products import Products
-from app.models.customers import Customers
-from app.models.tickets import Tickets
-from app.models.ticket_items import TicketItems
+from app.services.tasks import Tasks
 from app.config import Config
 from app.feishu.FeishuAppRobot import FeishuAppRobot
-from datetime import datetime, timedelta
 from app.services.sales_report import SalesReportService
 
 
@@ -15,14 +11,8 @@ def handle_bar_update():
     msg_service = MessageService(FeishuAppRobot(**Config.get_bar_robot()))
 
     msg_service.send_text_message(receive_id=receive_id, content='Starting data update')
-    start_time = (datetime.now() - timedelta(hours=6)).strftime('%Y-%m-%d %H:%M:%S')
-    end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    tasks = Tasks.get_bar_update_tasks()
 
-    tasks = [
-        ('single', Products, Products.update_strategy),
-        ('single', Customers, Customers.update_strategy),
-        ('multiple', Tickets, {Tickets: Tickets.update_strategy, TicketItems: TicketItems.update_strategy}, {'start_time': start_time, 'end_time': end_time})
-    ]
     for task_type, table_class, strategy, *extra_params in tasks:
         try:
             additional_args = extra_params[0] if extra_params else {}
