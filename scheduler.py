@@ -40,7 +40,7 @@ scheduler.add_job(
 )
 
 scheduler.add_job(
-    func=sync_bar_task(),
+    func=sync_bar_task,
     trigger=IntervalTrigger(hours=1, start_date=first_start),
     id='bar data',
     replace_existing=True
