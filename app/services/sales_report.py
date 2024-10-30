@@ -3,79 +3,91 @@ from app.repositories.query_repository import QueryRepository
 from datetime import datetime, timedelta
 from app.models.calendar import Calendar
 from app.models.tickets import Tickets
+from app.models.ticket_items import TicketItems
 from app.models.update_logs import UpdateLogs
 
 
 class SalesReportService(ReportService):
-    id = 'AAq7QaZZ15OqP'
-    version_name = '1.0.15'
+    id = 'AAq72IXC2cGmT'
+    version_name = '1.0.3'
 
-    def report(self, start_date=None, end_date=None):
-        start_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d') if not start_date else start_date
-        end_date = datetime.now().strftime('%Y-%m-%d') if not end_date else end_date
+    def report(self):
+        sql = f'''
+        select
+            sum(if(date(datetime) = current_date - interval 1 day, total_amount, 0)) revenue_prior
+            ,sum(if(date(datetime) = current_date - interval 1 day, 1, 0)) customers_prior
+            ,sum(if(date(datetime) between current_date - interval weekday(current_date - interval 1 day) + 1 day and current_date - interval 1 day, total_amount, 0)) revenue_wtd
+            ,sum(if(date(datetime) between current_date - interval weekday(current_date - interval 1 day) + 1 day and current_date - interval 1 day, 1, 0)) customers_wtd
+            ,sum(if(date(datetime) between date_format(current_date - interval 1 day, '%Y-%m-01') and current_date - interval 1 day, total_amount, 0)) revenue_mtd
+            ,sum(if(date(datetime) between date_format(current_date - interval 1 day, '%Y-%m-01') and current_date - interval 1 day, 1, 0)) customers_mtd
+            ,sum(if(date(datetime) between current_date - interval weekday(current_date - interval 1 day) + 7 day and current_date - interval weekday(current_date) day, total_amount, 0)) revenue_pre_week
+            ,sum(if(date(datetime) between current_date - interval weekday(current_date - interval 1 day) + 7 day and current_date - interval weekday(current_date) day, 1, 0)) customers_pre_week
+            ,sum(if(date(datetime) between date_format(current_date - interval day(current_date - interval 1 day) + 1 day, '%Y-%m-01') and date_format(current_date - interval 1 day, '%Y-%m-01') - interval 1 day, total_amount, 0)) revenue_pre_month
+            ,sum(if(date(datetime) between date_format(current_date - interval day(current_date - interval 1 day) + 1 day, '%Y-%m-01') and date_format(current_date - interval 1 day, '%Y-%m-01') - interval 1 day, 1, 0)) customers_pre_month
+        from {Tickets.__tablename__}
+        where date(datetime) between date_format(current_date - interval day(current_date) + 1 day, '%Y-%m-01') and current_date - interval 1 day
+            and invalid = 0
+        '''
+        sales = QueryRepository.fetch_df_dat(sql).iloc[0, :].to_dict()
+        sales['atv_prior'] = 0 if sales['customers_prior'] == 0 else sales['revenue_prior'] / sales['customers_prior']
+        sales['atv_wtd'] = 0 if sales['customers_wtd'] == 0 else sales['revenue_wtd'] / sales['customers_wtd']
+        sales['atv_mtd'] = 0 if sales['customers_mtd'] == 0 else sales['revenue_mtd'] / sales['customers_mtd']
+        sales['atv_pre_week'] = 0 if sales['customers_pre_week'] == 0 else sales['revenue_pre_week'] / sales['customers_pre_week']
+        sales['atv_pre_month'] = 0 if sales['customers_pre_month'] == 0 else sales['revenue_pre_month'] / sales['customers_pre_month']
 
         sql = f'''
-            select 
-                src.date order_date
-                ,coalesce(sales, 0) sales
-                ,coalesce(order_number, 0) order_number
-                ,round(coalesce(atv, 0), 2) atv
-            from (
-                select date
-                from {Calendar.__tablename__}
-                where date between '{start_date}' and '{end_date}'
-            ) src
-            left join (
-                select 
-                    date(datetime - interval 4 hour) order_date
-                    ,sum(total_amount) sales
-                    ,count(uid) order_number
-                    ,sum(total_amount) / count(uid) atv
-                from {Tickets.__tablename__}
-                where invalid = 0
-                    and date(datetime - interval 4 hour) between '{start_date}' and '{end_date}'
-                group by date(datetime - interval 4 hour)
-                order by order_date asc
-            ) tck on src.date = tck.order_date
-            '''
-        dat = QueryRepository.fetch_df_dat(sql)
-        dat['order_date'] = dat['order_date'].apply(str)
-        graph_sales = {
-            'type': 'bar',
-            'title': {
-                'text': 'Sales'
-            },
-            'data': {
-                'values': dat[['order_date', 'sales']].to_dict(orient='records')
-            },
-            'direction': 'horizontal',
-            'xField': 'sales',
-            'yField': 'order_date',
-            'axes': [
-                {
-                    'orient': 'bottom',
-                    'title': 'Sales Amount',
-                    'grid': True
-                },
-                {
-                    'orient': 'left',
-                    'title': 'Time',
-                    'grid': True,
-                    'label': {
-                        'align': 'left'  # 将 Y 轴的标签左对齐
-                    }
-                }
-            ],
-            'label': {
-                'position': 'inside',
-                'smartInvert': False
-            },
-            'bar': {
-                'barWidth': 20,  # 柱子的宽度
-                'cornerRadius': [4, 4, 0, 0]  # 柱子的圆角
-            }
-        }
+        select 
+            name
+            ,sum(quantity) quantity
+            ,sum(total_amount) amount
+        from {TicketItems.__tablename__}
+        where ticket_uid in (
+            select uid
+            from {Tickets.__tablename__}
+            where date(datetime) = current_date - interval 1 day
+                and invalid = 0
+        )
+        group by name
+        order by amount desc
+        '''
+        item_day = QueryRepository.fetch_df_dat(sql)
+        item_day = self.process_item(item_day)
 
+        sql = f'''
+        select 
+            name
+            ,sum(quantity) quantity
+            ,sum(total_amount) amount
+        from {TicketItems.__tablename__}
+        where ticket_uid in (
+            select uid
+            from {Tickets.__tablename__}
+            where date(datetime) between current_date - interval weekday(current_date - interval 1 day) + 1 day and current_date - interval 1 day
+                and invalid = 0
+        )
+        group by name
+        order by amount desc
+        '''
+        item_week = QueryRepository.fetch_df_dat(sql)
+        item_week = self.process_item(item_week)
+
+        sql = f'''
+        select 
+            name
+            ,sum(quantity) quantity
+            ,sum(total_amount) amount
+        from {TicketItems.__tablename__}
+        where ticket_uid in (
+            select uid
+            from {Tickets.__tablename__}
+            where date(datetime) between date_format(current_date - interval 1 day, '%Y-%m-01') and current_date - interval 1 day
+                and invalid = 0
+        )
+        group by name
+        order by amount desc
+        '''
+        item_month = QueryRepository.fetch_df_dat(sql)
+        item_month = self.process_item(item_month)
 
         sql = f'''
         select max(update_at) update_at
@@ -85,9 +97,28 @@ class SalesReportService(ReportService):
         update_at = QueryRepository.fetch_df_dat(sql).iloc[0, 0].strftime('%Y-%m-%d %H:%M:%S')
 
         res = {
-            'start_date': start_date,
-            'end_date': end_date,
-            'graph_sales': graph_sales,
-            'update_at': update_at
+            'update_at': update_at,
+            'revenue_prior': self.format_number(sales['revenue_prior'], 2),
+            'customers_prior': self.format_number(sales['customers_prior'], 0),
+            'atv_prior': self.format_number(sales['atv_prior'], 2),
+            'revenue_wtd': self.format_number(sales['revenue_wtd'], 2),
+            'customers_wtd': self.format_number(sales['customers_wtd'], 0),
+            'atv_wtd': self.format_number(sales['atv_wtd'], 2),
+            'revenue_mtd': self.format_number(sales['revenue_mtd'], 2),
+            'customers_mtd': self.format_number(sales['customers_mtd'], 0),
+            'atv_mtd': self.format_number(sales['atv_mtd'], 2),
+            'revenue_pre_week': self.format_number(sales['revenue_pre_week'], 2),
+            'customers_pre_week': self.format_number(sales['customers_pre_week'], 0),
+            'revenue_pre_month': self.format_number(sales['revenue_pre_month'], 2),
+            'customers_pre_month': self.format_number(sales['customers_pre_month'], 0),
+            'item_day': item_day,
+            'item_week': item_week,
+            'item_month': item_month
         }
         return res
+
+    def process_item(self, item):
+        item['quantity'] = item['quantity'].apply(self.format_number, decimals=0)
+        item['amount'] = item['amount'].apply(self.format_number, decimals=2)
+        item = item.to_dict(orient='records')
+        return item

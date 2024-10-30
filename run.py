@@ -5,6 +5,7 @@ from app.config import Config
 from app.controller.handle_bar_event import handle_bar_update
 from app.controller.handle_crypto_event import handle_crypto_update
 from app.models.tickets import Tickets
+from app.models.ticket_items import TicketItems
 from app.repositories.query_repository import QueryRepository
 from app.repositories.update_repository import UpdateRepository
 from app.services.update_strategy import UpdateStrategy
@@ -28,14 +29,20 @@ if __name__ == '__main__':
     # SyncService.update_table(DepositHistory, DepositHistory.update_strategy)
     # SyncService.update_table(Instruments, Instruments.update_strategy, instType='SPOT')
     # SyncService.update_table(Products, Products.update_strategy)
-    receive_id = Config.get_user_id('Fang Yongchao')
-    msg_service = MessageService(FeishuAppRobot(**Config.get_bar_robot()))
-    srs = SalesReportService()
-
-    msg_service.send_text_message(receive_id=receive_id, content='Sales Report Generating')
-
-    msg_service.send_interactive_card(
-        receive_id=receive_id, template_id=srs.id, template_variable=srs.report(),
-        template_version_name=srs.version_name
+    start_time = (datetime.now() - timedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')
+    end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    SyncService.update_multiple_table(
+        Tickets, {Tickets: Tickets.update_strategy, TicketItems: TicketItems.update_strategy},
+        start_time=start_time, end_time=end_time
     )
+    # receive_id = Config.get_user_id('Fang Yongchao')
+    # msg_service = MessageService(FeishuAppRobot(**Config.get_bar_robot()))
+    # srs = SalesReportService()
+    #
+    # msg_service.send_text_message(receive_id=receive_id, content='Sales Report Generating')
+    #
+    # msg_service.send_interactive_card(
+    #     receive_id=receive_id, template_id=srs.id, template_variable=srs.report(),
+    #     template_version_name=srs.version_name
+    # )
 
