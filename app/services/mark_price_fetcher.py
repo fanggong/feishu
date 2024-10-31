@@ -1,9 +1,11 @@
 from app.services.data_fetcher import DataFetcher
 from app.okx.PublicData import PublicAPI
 from app.config import Config
+from app.utils.decorators import retry
 
 
 class MarkPriceFetcher(DataFetcher):
+    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
     def fetch_data(self, instType, **kwargs):
         dat = PublicAPI(**Config.get_okx_keys(), flag='0').get_mark_price(instType, **kwargs)
         if dat['code'] == '0':

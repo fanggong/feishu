@@ -2,9 +2,11 @@ from app.services.data_fetcher import DataFetcher
 from app.okx.Funding import FundingAPI
 from app.config import Config
 import time
+from app.utils.decorators import retry
 
 
 class DepositHistoryFetcher(DataFetcher):
+    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
     def fetch_data(self, **kwargs):
         dat = self._get_deposit_history(**kwargs)
         dat = [self.process_data(item) for item in dat]

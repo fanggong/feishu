@@ -1,9 +1,11 @@
 from app.services.data_fetcher import DataFetcher
 from app.okx.Account import AccountAPI
 from app.config import Config
+from app.utils.decorators import retry
 
 
 class BalanceFetcher(DataFetcher):
+    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
     def fetch_data(self):
         dat = AccountAPI(**Config.get_okx_keys(), flag='0').get_account_balance()
         if dat['code'] == '0':

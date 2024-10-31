@@ -14,14 +14,7 @@ from app.models.deposit_history import DepositHistory
 from datetime import datetime, timedelta
 from app.services.sales_report import SalesReportService
 import time
-# import logging
-#
-# logger = logging.getLogger('sqlalchemy.engine')
-# logger.setLevel(logging.INFO)
-# handle = logging.StreamHandler()
-# handle.setLevel(logging.INFO)
-# logger.addHandler(handle)
-# import scheduler
+import scheduler
 
 
 if __name__ == '__main__':

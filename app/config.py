@@ -16,7 +16,11 @@ class Config:
     @classmethod
     def get_okx_keys(cls):
         config = cls.load_config()['okx']
-        return {'api_key': config['api_key'], 'api_secret_key': config['secret_key'], 'passphrase': config['passphrase']}
+        return {
+            'api_key': config['api_key'],
+            'api_secret_key': config['secret_key'],
+            'passphrase': config['passphrase']
+        }
 
     @classmethod
     def get_yinbao_keys(cls):
