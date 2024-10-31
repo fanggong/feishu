@@ -9,7 +9,7 @@ from app.models.update_logs import UpdateLogs
 
 class SalesReportService(ReportService):
     id = 'AAq72IXC2cGmT'
-    version_name = '1.0.3'
+    version_name = '1.0.4'
 
     def report(self):
         sql = f'''
