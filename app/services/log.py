@@ -7,7 +7,7 @@ from app.utils.decorators import retry
 
 class LogService:
     @staticmethod
-    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
+    @retry(max_retries=3, delay=2)
     def record_update_logs(table_class, status, details=''):
         session = db_session()
         log_entry = {
