@@ -6,7 +6,7 @@ from app.utils.decorators import retry
 
 
 class WithdrawHistoryFetcher(DataFetcher):
-    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
+    @retry(max_retries=3, delay=2)
     def fetch_data(self, **kwargs):
         dat = self._get_withdraw_history(**kwargs)
         dat = [self.process_data(item) for item in dat]

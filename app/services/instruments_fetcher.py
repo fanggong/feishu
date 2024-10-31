@@ -5,7 +5,7 @@ from app.utils.decorators import retry
 
 
 class InstrumentsFetcher(DataFetcher):
-    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
+    @retry(max_retries=3, delay=2)
     def fetch_data(self, instType, **kwargs):
         dat = PublicAPI(**Config.get_okx_keys(), flag='0').get_instruments(instType, **kwargs)
         if dat['code'] == '0':

@@ -2,10 +2,12 @@ from app.database.mysql import db_session
 from datetime import datetime
 from sqlalchemy import insert
 from app.models.update_logs import UpdateLogs
+from app.utils.decorators import retry
 
 
 class LogService:
     @staticmethod
+    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
     def record_update_logs(table_class, status, details=''):
         session = db_session()
         log_entry = {

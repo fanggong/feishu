@@ -6,7 +6,7 @@ from app.utils.decorators import retry
 
 class QueryRepository:
     @staticmethod
-    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
+    @retry(max_retries=3, delay=2)
     def execute_raw_sql(sql: str, params=None):
         """
         执行一段原生 SQL 查询，并返回结果
@@ -22,7 +22,7 @@ class QueryRepository:
             session.close()
 
     @staticmethod
-    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
+    @retry(max_retries=3, delay=2)
     def fetch_df_dat(sql: str, params=None):
         """
         使用 session 执行原生 SQL 查询，并返回结果的 DataFrame

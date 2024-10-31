@@ -6,7 +6,7 @@ from app.utils.decorators import retry
 
 
 class TicketsFetcher(DataFetcher):
-    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
+    @retry(max_retries=3, delay=2)
     def fetch_data(self, start_time, end_time):
         sales_api = SalesApi(**Config.get_yinbao_keys())
         tmp = sales_api.get_tickets(start_time=start_time, end_time=end_time)

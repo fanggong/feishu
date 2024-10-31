@@ -5,7 +5,7 @@ from app.utils.decorators import retry
 
 
 class CustomersFetcher(DataFetcher):
-    @retry(max_retries=3, delay=2, exceptions=(TimeoutError, ConnectionError))
+    @retry(max_retries=3, delay=2)
     def fetch_data(self, **kwargs):
         dat = CustomersApi(**Config.get_yinbao_keys()).get_customers()
         if dat['status'] == 'success':
