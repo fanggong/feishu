@@ -2,6 +2,7 @@ from app.main import app
 from app.config import Config
 from app.models import *
 from app.services.message_service import MessageService
+from app.services.log import LogService
 from app.feishu.FeishuAppRobot import FeishuAppRobot
 from app.controller.handle_bar_event import handle_bar_update
 from app.controller.handle_crypto_event import handle_crypto_update
@@ -19,6 +20,7 @@ import scheduler
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=11066)
+    # LogService.record_update_logs(Products, 1)
     # start_time = (datetime.now() - timedelta(hours=24)).strftime('%Y-%m-%d %H:%M:%S')
     # start_time = int(time.mktime(time.strptime(start_time, '%Y-%m-%d %H:%M:%S')) * 1000)
     # SyncService.update_table(BillsHistory, BillsHistory.update_strategy, begin=start_time)

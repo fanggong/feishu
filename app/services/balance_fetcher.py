@@ -5,8 +5,9 @@ from app.utils.decorators import retry
 
 
 class BalanceFetcher(DataFetcher):
-    @retry(max_retries=3, delay=2)
+    @retry(max_retries=5, delay=1)
     def fetch_data(self):
+        print(f'BalanceFetcher running...')
         dat = AccountAPI(**Config.get_okx_keys(), flag='0').get_account_balance()
         if dat['code'] == '0':
             dat = dat['data'][0]['details']

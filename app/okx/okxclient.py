@@ -39,8 +39,10 @@ class OkxClient(Client):
             header = utils.get_header_no_sign(self.flag, self.debug)
         response = None
         if self.debug:
+            print('header:', header)
             print('domain:', self.domain)
             print('url:', request_path)
+            print('body:', body)
         if method == c.GET:
             response = self.get(request_path, headers=header)
         elif method == c.POST:

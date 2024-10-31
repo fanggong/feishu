@@ -5,8 +5,9 @@ from app.utils.decorators import retry
 
 
 class PositionsFetcher(DataFetcher):
-    @retry(max_retries=3, delay=2)
+    @retry(max_retries=5, delay=1)
     def fetch_data(self, **kwargs):
+        print(f'PositionsFetcher running...')
         dat = AccountAPI(**Config.get_okx_keys(), flag='0').get_positions(**kwargs)
         if dat['code'] == '0':
             dat = dat['data']

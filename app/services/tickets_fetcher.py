@@ -6,8 +6,9 @@ from app.utils.decorators import retry
 
 
 class TicketsFetcher(DataFetcher):
-    @retry(max_retries=3, delay=2)
+    @retry(max_retries=5, delay=1)
     def fetch_data(self, start_time, end_time):
+        print(f'TicketsFetcher running...')
         sales_api = SalesApi(**Config.get_yinbao_keys())
         tmp = sales_api.get_tickets(start_time=start_time, end_time=end_time)
         if tmp['status'] == 'success':

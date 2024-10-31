@@ -5,8 +5,9 @@ from app.utils.decorators import retry
 
 
 class ProductsFetcher(DataFetcher):
-    @retry(max_retries=3, delay=2)
+    @retry(max_retries=5, delay=1)
     def fetch_data(self, **kwargs):
+        print(f'ProductsFetcher running...')
         products_api = ProductsApi(**Config.get_yinbao_keys())
         tmp = products_api.get_products()
         if tmp['status'] == 'success':

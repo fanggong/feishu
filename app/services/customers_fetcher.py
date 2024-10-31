@@ -5,8 +5,9 @@ from app.utils.decorators import retry
 
 
 class CustomersFetcher(DataFetcher):
-    @retry(max_retries=3, delay=2)
+    @retry(max_retries=5, delay=1)
     def fetch_data(self, **kwargs):
+        print(f'CustomersFetcher running...')
         dat = CustomersApi(**Config.get_yinbao_keys()).get_customers()
         if dat['status'] == 'success':
             dat = dat['data']['result']

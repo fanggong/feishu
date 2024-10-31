@@ -6,8 +6,9 @@ from app.utils.decorators import retry
 
 
 class BillsHistoryFetcher(DataFetcher):
-    @retry(max_retries=3, delay=2)
+    @retry(max_retries=5, delay=1)
     def fetch_data(self, **kwargs):
+        print(f'BillsHistoryFetcher running...')
         dat = self._get_bills_history(**kwargs)
         dat = [self.process_data(item) for item in dat]
         return dat
