@@ -1,0 +1,2 @@
+from app.repositories.query_repository import QueryRepository
+from app.repositories.update_repository import UpdateRepository
