@@ -12,6 +12,7 @@ class SalesReportService(ReportService):
     version_name = '1.0.4'
 
     def report(self):
+        print('SalesReport Generating...')
         sql = f'''
         select
             sum(if(date(datetime) = current_date - interval 1 day, total_amount, 0)) revenue_prior

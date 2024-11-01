@@ -12,6 +12,7 @@ class RiskReportService(ReportService):
     version_name = '1.0.4'
 
     def report(self):
+        print('RiskReport Generating...')
         sql = f'''
             select 
                 concat(regexp_substr(src.inst_id, '[A-Z]+', 1, 1), '(', lever, ')') ccy

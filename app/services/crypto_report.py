@@ -16,6 +16,7 @@ class CryptoReportService(ReportService):
     version_name = '1.0.11'
 
     def report(self):
+        print('CryptoReport Generating...')
         sql = f'''
             select 
                 src.ccy ccy
