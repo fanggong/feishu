@@ -25,7 +25,7 @@ class SalesReportService(ReportService):
             ,sum(if(date(datetime) between date_format(current_date - interval day(current_date - interval 1 day) + 1 day, '%Y-%m-01') and date_format(current_date - interval 1 day, '%Y-%m-01') - interval 1 day, total_amount, 0)) revenue_pre_month
             ,sum(if(date(datetime) between date_format(current_date - interval day(current_date - interval 1 day) + 1 day, '%Y-%m-01') and date_format(current_date - interval 1 day, '%Y-%m-01') - interval 1 day, 1, 0)) customers_pre_month
         from {Tickets.__tablename__}
-        where date(datetime) between date_format(current_date - interval day(current_date) + 1 day, '%Y-%m-01') and current_date - interval 1 day
+        where date(datetime) between date_format(current_date - interval day(current_date - interval 1 day) + 1 day, '%Y-%m-01') and current_date - interval 1 day
             and invalid = 0
         '''
         sales = QueryRepository.fetch_df_dat(sql).iloc[0, :].to_dict()
