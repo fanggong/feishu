@@ -3,12 +3,15 @@ from app.yinbao.Sales import SalesApi
 from app.config import Config
 from itertools import chain
 from app.utils.decorators import retry
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class TicketsFetcher(DataFetcher):
     @retry(max_retries=5, delay=1)
     def fetch_data(self, start_time, end_time):
-        print(f'TicketsFetcher running...')
+        logger.info(f'SERVICE IS RUNNING...')
         sales_api = SalesApi(**Config.get_yinbao_keys())
         tmp = sales_api.get_tickets(start_time=start_time, end_time=end_time)
         if tmp['status'] == 'success':

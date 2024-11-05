@@ -5,6 +5,9 @@ from app.models.calendar import Calendar
 from app.models.tickets import Tickets
 from app.models.ticket_items import TicketItems
 from app.models.update_logs import UpdateLogs
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class SalesReportService(ReportService):
@@ -12,7 +15,7 @@ class SalesReportService(ReportService):
     version_name = '1.0.4'
 
     def report(self):
-        print('SalesReport Generating...')
+        logger.info(f'SERVICE IS RUNNING...')
         sql = f'''
         select
             sum(if(date(datetime) = current_date - interval 1 day, total_amount, 0)) revenue_prior

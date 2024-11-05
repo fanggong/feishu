@@ -2,12 +2,15 @@ from app.services.data_fetcher import DataFetcher
 from app.okx.Account import AccountAPI
 from app.config import Config
 from app.utils.decorators import retry
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class BalanceFetcher(DataFetcher):
     @retry(max_retries=5, delay=1)
     def fetch_data(self):
-        print(f'BalanceFetcher running...')
+        logger.info(f'SERVICE IS RUNNING...')
         dat = AccountAPI(**Config.get_okx_keys(), flag='0').get_account_balance()
         if dat['code'] == '0':
             dat = dat['data'][0]['details']

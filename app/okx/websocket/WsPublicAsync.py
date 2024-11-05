@@ -2,7 +2,7 @@ import asyncio
 import json
 import logging
 
-from okx.websocket.WebSocketFactory import WebSocketFactory
+from app.okx.websocket.WebSocketFactory import WebSocketFactory
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("WsPublic")

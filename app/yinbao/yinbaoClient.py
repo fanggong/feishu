@@ -2,7 +2,9 @@ import json
 
 from httpx import Client
 from . import const as c, utils as u
+import logging
 
+logger = logging.getLogger(__name__)
 
 class YinbaoClient(Client):
 
@@ -19,9 +21,9 @@ class YinbaoClient(Client):
         body = json.dumps(params) if method == c.POST else ''
         sign = u.encrypt_to_md5_string(body, self.app_key)
         header = u.get_header(timestamp, sign)
-        print(f'domain: {self.domain}')
-        print(f'request path: {request_path}')
-        print(f'body: {body}')
+        logger.debug(f'domain: {self.domain}')
+        logger.debug(f'request path: {request_path}')
+        logger.debug(f'body: {body}')
         response = None
         if method == c.GET:
             response = self.get(request_path, headers=header)

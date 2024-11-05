@@ -1,5 +1,5 @@
 from app.config import Config
-from app.services.message_service import MessageService
+from app.services.message import Message
 from app.services.tasks import Tasks
 from app.feishu.FeishuAppRobot import FeishuAppRobot
 from app.services.sync_service import SyncService
@@ -9,7 +9,7 @@ from app.services.risk_report import RiskReportService
 
 def handle_crypto_update():
     receive_id = Config.get_user_id('Fang Yongchao')
-    msg_service = MessageService(FeishuAppRobot(**Config.get_crypto_robot()))
+    msg_service = Message(FeishuAppRobot(**Config.get_crypto_robot()))
 
     msg_service.send_text_message(receive_id=receive_id, content='Starting data update')
     tasks = Tasks.get_crypto_update_tasks()
@@ -37,7 +37,7 @@ def handle_crypto_update():
 
 def handle_crypto_report():
     receive_id = Config.get_user_id('Fang Yongchao')
-    msg_service = MessageService(FeishuAppRobot(**Config.get_crypto_robot()))
+    msg_service = Message(FeishuAppRobot(**Config.get_crypto_robot()))
     crs = CryptoReportService()
 
     msg_service.send_text_message(receive_id=receive_id, content='Finance Report Generating')
@@ -50,7 +50,7 @@ def handle_crypto_report():
 
 def handle_risk_report():
     receive_id = Config.get_user_id('Fang Yongchao')
-    msg_service = MessageService(FeishuAppRobot(**Config.get_crypto_robot()))
+    msg_service = Message(FeishuAppRobot(**Config.get_crypto_robot()))
     rrs = RiskReportService()
 
     msg_service.send_text_message(receive_id=receive_id, content='Risk Report Generating')

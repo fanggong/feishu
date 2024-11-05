@@ -201,4 +201,5 @@ tmp*.py
 data/*
 
 config.yml
-config_x.py
+
+app/strategy/*

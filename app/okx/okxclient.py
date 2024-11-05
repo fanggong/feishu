@@ -5,8 +5,11 @@ from datetime import datetime, timezone
 import httpx
 from httpx import Client
 from datetime import datetime, timezone
+import logging
 
 from . import consts as c, utils, exceptions
+
+logger = logging.getLogger(__name__)
 
 
 class OkxClient(Client):
@@ -20,7 +23,7 @@ class OkxClient(Client):
         self.use_server_time = False
         self.flag = flag
         self.domain = base_api
-        self.debug = debug
+        self.debug = False
         if use_server_time is not None:
             warnings.warn("use_server_time parameter is deprecated. Please remove it.", DeprecationWarning)
 
@@ -38,11 +41,10 @@ class OkxClient(Client):
         else:
             header = utils.get_header_no_sign(self.flag, self.debug)
         response = None
-        if self.debug:
-            print('header:', header)
-            print('domain:', self.domain)
-            print('url:', request_path)
-            print('body:', body)
+        logger.debug('header:', header)
+        logger.debug('domain:', self.domain)
+        logger.debug('url:', request_path)
+        logger.debug('body:', body)
         if method == c.GET:
             response = self.get(request_path, headers=header)
         elif method == c.POST:

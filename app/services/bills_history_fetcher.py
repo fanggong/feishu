@@ -3,12 +3,15 @@ from app.okx.Account import AccountAPI
 from app.config import Config
 import time
 from app.utils.decorators import retry
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class BillsHistoryFetcher(DataFetcher):
     @retry(max_retries=5, delay=1)
     def fetch_data(self, **kwargs):
-        print(f'BillsHistoryFetcher running...')
+        logger.info(f'SERVICE IS RUNNING...')
         dat = self._get_bills_history(**kwargs)
         dat = [self.process_data(item) for item in dat]
         return dat

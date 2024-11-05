@@ -1,5 +1,5 @@
 from app.services.sync_service import SyncService
-from app.services.message_service import MessageService
+from app.services.message import Message
 from app.services.tasks import Tasks
 from app.config import Config
 from app.feishu.FeishuAppRobot import FeishuAppRobot
@@ -8,7 +8,7 @@ from app.services.sales_report import SalesReportService
 
 def handle_bar_update():
     receive_id = Config.get_user_id('Fang Yongchao')
-    msg_service = MessageService(FeishuAppRobot(**Config.get_bar_robot()))
+    msg_service = Message(FeishuAppRobot(**Config.get_bar_robot()))
 
     msg_service.send_text_message(receive_id=receive_id, content='Starting data update')
     tasks = Tasks.get_bar_update_tasks()
@@ -30,7 +30,7 @@ def handle_bar_update():
 
 def handle_sales_report():
     receive_id = Config.get_user_id('Fang Yongchao')
-    msg_service = MessageService(FeishuAppRobot(**Config.get_bar_robot()))
+    msg_service = Message(FeishuAppRobot(**Config.get_bar_robot()))
     srs = SalesReportService()
 
     msg_service.send_text_message(receive_id=receive_id, content='Sales Report Generating')

@@ -1,8 +1,9 @@
 from app.repositories.update_repository import UpdateRepository
 from app.services.update_strategy import UpdateStrategy
 from app.services.log import LogService
-from app.services.message_service import MessageService
-from app.config import Config
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class SyncService:
@@ -37,13 +38,13 @@ class SyncService:
     def update_table(table_class, strategy: UpdateStrategy, **kwargs):
         data_fetcher = SyncService.get_data_fetcher(table_class)
         data_list = data_fetcher.fetch_data(**kwargs)
-        print(f'Data for table {table_class.__tablename__} GETODAZE!!!')
+        logger.info(f'Data for table {table_class.__tablename__} GETODAZE!!!')
 
         if not data_list:
-            print('No data to update for table:', table_class.__tablename__)
+            logger.info('No data to update for table:', table_class.__tablename__)
             return
 
-        print(f'{strategy} update table {table_class.__tablename__}')
+        logger.info(f'{strategy} update table {table_class.__tablename__}')
         try:
             if strategy == UpdateStrategy.FULL:
                 UpdateRepository.full_update(table_class, data_list)
@@ -58,14 +59,14 @@ class SyncService:
     def update_multiple_table(table_class, strategy, **kwargs):
         data_fetcher = SyncService.get_data_fetcher(table_class)
         data_list = data_fetcher.fetch_data(**kwargs)
-        print(f'Data for table {table_class.__tablename__} GETODAZE')
+        logger.info(f'Data for table {table_class.__tablename__} GETODAZE')
 
         if not data_list:
-            print("No data to update for table:", table_class.__tablename__)
+            logger.info("No data to update for table:", table_class.__tablename__)
             return
 
         for index, (key, value) in enumerate(strategy.items()):
-            print(f'{value} update table {key.__tablename__}')
+            logger.info(f'{value} update table {key.__tablename__}')
             try:
                 if value == UpdateStrategy.FULL:
                     UpdateRepository.full_update(key, data_list[index])

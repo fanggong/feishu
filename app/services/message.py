@@ -1,8 +1,11 @@
 from app.feishu.FeishuAppRobot import FeishuAppRobot
 from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-class MessageService:
+class Message:
     def __init__(self, robot: FeishuAppRobot):
         self.robot = robot
         self.name = robot.get_robot_name()

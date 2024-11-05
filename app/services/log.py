@@ -3,6 +3,9 @@ from datetime import datetime
 from sqlalchemy.dialects.mysql import insert
 from app.models.update_logs import UpdateLogs
 from app.utils.decorators import retry
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class LogService:

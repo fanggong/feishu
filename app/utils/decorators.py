@@ -1,5 +1,8 @@
 import functools
 import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def retry(max_retries=5, delay=1):
@@ -11,9 +14,9 @@ def retry(max_retries=5, delay=1):
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
-                    print(f"Error occurred in {func.__name__}: {e}. Retrying {retries + 1}/{max_retries}...")
+                    logger.info(f"Error occurred in {func.__name__}: {e}. Retrying {retries + 1}/{max_retries}...")
                     retries += 1
                     time.sleep(delay)
-            print(f"Failed to execute {func.__name__} after {max_retries} attempts.")
+            logger.info(f"Failed to execute {func.__name__} after {max_retries} attempts.")
         return wrapper
     return decorator

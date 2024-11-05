@@ -50,10 +50,3 @@ def get_header(timestamp, sign):
         'data-signature': sign
     }
     return header
-
-
-if __name__ == '__main__':
-    json_str = '{"key":"value"}'  # JSON 字符串
-    app_key = '771248066370435525'      # app_key
-    data_signature = encrypt_to_md5_string(json_str, app_key)
-    print(data_signature)

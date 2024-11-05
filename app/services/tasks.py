@@ -1,6 +1,9 @@
 import time
 from datetime import datetime, timedelta
 from app.models import *
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Tasks:

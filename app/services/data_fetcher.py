@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from datetime import datetime as dt
-from app.utils.decorators import retry
 
 
 class DataFetcher(ABC):

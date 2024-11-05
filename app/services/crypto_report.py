@@ -9,6 +9,9 @@ from app.models.withdraw_history import WithdrawHistory
 from app.models.c2c import C2C
 from app.models.update_logs import UpdateLogs
 import pandas as pd
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class CryptoReportService(ReportService):
@@ -16,7 +19,7 @@ class CryptoReportService(ReportService):
     version_name = '1.0.11'
 
     def report(self):
-        print('CryptoReport Generating...')
+        logger.info(f'SERVICE IS RUNNING...')
         sql = f'''
             select 
                 src.ccy ccy

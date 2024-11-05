@@ -5,14 +5,14 @@ from app.services.tasks import Tasks
 from app.services.sync_service import SyncService
 from datetime import datetime, timedelta
 import threading
+import logging
 
-# 创建一个全局锁
+logger = logging.getLogger(__name__)
 task_lock = threading.Lock()
 
 
 def sync_crypto_task():
     with task_lock:
-        print('Starting sync_crypto_task...')
         tasks = Tasks.get_crypto_update_tasks()
         for task_type, table_class, strategy, *extra_params in tasks:
             additional_args = extra_params[0] if extra_params else {}
@@ -20,12 +20,10 @@ def sync_crypto_task():
                 SyncService.update_table(table_class, strategy, **additional_args)
             elif task_type == 'multiple':
                 SyncService.update_multiple_table(table_class, strategy, **additional_args)
-        print('Finished sync_crypto_task.')
 
 
 def sync_bar_task():
     with task_lock:
-        print('Starting sync_bar_task...')
         tasks = Tasks.get_bar_update_tasks()
         for task_type, table_class, strategy, *extra_params in tasks:
             additional_args = extra_params[0] if extra_params else {}
@@ -33,8 +31,6 @@ def sync_bar_task():
                 SyncService.update_table(table_class, strategy)
             elif task_type == 'multiple':
                 SyncService.update_multiple_table(table_class, strategy, **additional_args)
-        print('Finished sync_bar_task.')
-
 
 # 配置调度器
 scheduler = BackgroundScheduler()

@@ -2,12 +2,15 @@ from app.services.data_fetcher import DataFetcher
 from app.yinbao.Customers import CustomersApi
 from app.config import Config
 from app.utils.decorators import retry
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class CustomersFetcher(DataFetcher):
     @retry(max_retries=5, delay=1)
     def fetch_data(self, **kwargs):
-        print(f'CustomersFetcher running...')
+        logger.info(f'SERVICE IS RUNNING...')
         dat = CustomersApi(**Config.get_yinbao_keys()).get_customers()
         if dat['status'] == 'success':
             dat = dat['data']['result']
