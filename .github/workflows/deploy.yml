@@ -32,7 +32,6 @@ jobs:
           script: |
             conda env update -f /srv/feishu/environment.yml
             cp /root/config.yml /srv/feishu/config.yml
-            pkill -f run.py || true
             cd /srv/feishu
             chmod +x deploy.sh
             ./deploy.sh
