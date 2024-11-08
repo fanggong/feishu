@@ -1,5 +1,3 @@
 #!/bin/bash
 
-pkill -f "run.py" > /dev/null 2>&1
-source ~/miniconda3/bin/activate feishu
-python3 run.py
+nohup conda run -n feishu python /srv/feishu/run.py > /srv/feishu/output.log 2>&1 &
