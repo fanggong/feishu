@@ -89,12 +89,8 @@ class CryptoReportService(ReportService):
         sql = f'''
         select
             src.ccy ccy
-            ,c2c_buy - c2c_sell cost
-            ,(c2c_buy - c2c_sell) * coalesce(mark_px, 1) cost_usdt
-            ,deposit profit
-            ,deposit * coalesce(mark_px, 1) profit_usdt
-            ,withdraw loss
-            ,withdraw * coalesce(mark_px, 1) loss_usdt
+            ,c2c_buy - c2c_sell + deposit - withdraw cost
+            ,(c2c_buy - c2c_sell + deposit - withdraw) * coalesce(mark_px, 1) cost_usdt
         from (
             select 
                 ccy
@@ -110,8 +106,9 @@ class CryptoReportService(ReportService):
                     ,0 withdraw
                     ,0 c2c_buy
                     ,0 c2c_sell
-                from {DepositHistory.__tablename__} dh
+                from {DepositHistory.__tablename__}
                 where state = 2
+                    and area_code_from = 86
                 group by ccy
                 union all
                 select 
@@ -120,8 +117,9 @@ class CryptoReportService(ReportService):
                     ,sum(amt) withdraw
                     ,0 c2c_buy
                     ,0 c2c_sell
-                from {WithdrawHistory.__tablename__} wh
+                from {WithdrawHistory.__tablename__}
                 where state = 2
+                    and area_code_to = 86
                 group by ccy
                 union all
                 select 
@@ -188,7 +186,7 @@ class CryptoReportService(ReportService):
 
         equity = spot_asset.value.sum()
         nav = equity + derivative_asset.value.sum()
-        pnl = equity - (cost.cost_usdt.sum() + cost.profit_usdt.sum() - cost.loss_usdt.sum())
+        pnl = equity - cost.cost_usdt.sum()
 
         asset_format = pd.concat([spot_asset, derivative_asset]).groupby('ccy').sum().reset_index().sort_values('value', ascending=False)
         asset_format['amt'] = asset_format['amt'].apply(lambda x: self.format_number(x, 6))
