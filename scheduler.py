@@ -32,6 +32,7 @@ def sync_bar_task():
             elif task_type == 'multiple':
                 SyncService.update_multiple_table(table_class, strategy, **additional_args)
 
+
 # 配置调度器
 scheduler = BackgroundScheduler()
 scheduler.start()

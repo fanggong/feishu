@@ -28,7 +28,7 @@ class Positions(Base):
     gamma_pa = Column(DECIMAL(38, 16), nullable=True, comment='Gamma PA')
     idx_px = Column(DECIMAL(38, 16), nullable=True, comment='指数价格')
     imr = Column(DECIMAL(38, 16), nullable=True, comment='初始保证金率')
-    inst_id = Column(String(255), nullable=True, comment='产品 ID')
+    inst_id = Column(String(255), primary_key=True, nullable=True, comment='产品 ID')
     inst_type = Column(String(255), nullable=True, comment='产品类型')
     interest = Column(DECIMAL(38, 16), nullable=True, comment='利息')
     last = Column(DECIMAL(38, 16), nullable=True, comment='最后价格')

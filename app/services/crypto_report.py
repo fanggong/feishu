@@ -1,13 +1,6 @@
 from app.repositories.query_repository import QueryRepository
 from app.services.report import ReportService
-from app.models.balance import Balance
-from app.models.mark_price import MarkPrice
-from app.models.positions import Positions
-from app.models.instruments import Instruments
-from app.models.deposit_history import DepositHistory
-from app.models.withdraw_history import WithdrawHistory
-from app.models.c2c import C2C
-from app.models.update_logs import UpdateLogs
+from app.models import *
 import pandas as pd
 import logging
 
@@ -94,58 +87,62 @@ class CryptoReportService(ReportService):
         upl = QueryRepository.fetch_df_dat(sql)
 
         sql = f'''
-            select
-                src.ccy ccy
-                ,amt
-                ,amt * coalesce(mark_px, 1) amt_usdt
+        select
+            src.ccy ccy
+            ,c2c_buy - c2c_sell cost
+            ,(c2c_buy - c2c_sell) * coalesce(mark_px, 1) cost_usdt
+            ,deposit profit
+            ,deposit * coalesce(mark_px, 1) profit_usdt
+            ,withdraw loss
+            ,withdraw * coalesce(mark_px, 1) loss_usdt
+        from (
+            select 
+                ccy
+                ,sum(deposit) deposit
+                ,sum(withdraw) withdraw
+                ,sum(c2c_buy) c2c_buy
+                ,sum(c2c_sell) c2c_sell
+                ,sum(c2c_buy) - sum(c2c_sell) - sum(deposit) + sum(withdraw) amt
             from (
                 select 
                     ccy
-                    ,sum(deposit) deposit
-                    ,sum(withdraw) withdraw
-                    ,sum(c2c_buy) c2c_buy
-                    ,sum(c2c_sell) c2c_sell
-                    ,sum(c2c_buy) - sum(c2c_sell) + sum(deposit) - sum(withdraw) amt
-                from (
-                    select 
-                        ccy
-                        ,sum(amt) deposit
-                        ,0 withdraw
-                        ,0 c2c_buy
-                        ,0 c2c_sell
-                    from {DepositHistory.__tablename__}
-                    where state = 2
-                    group by ccy
-                    union all
-                    select 
-                        ccy
-                        ,0 deposit
-                        ,sum(amt) withdraw
-                        ,0 c2c_buy
-                        ,0 c2c_sell
-                    from {WithdrawHistory.__tablename__}
-                    where state = 2
-                    group by ccy
-                    union all
-                    select 
-                        'USDT' ccy
-                        ,0 deposit
-                        ,0 withdraw
-                        ,sum(if(side = 'buy', amt, 0)) c2c_buy
-                        ,sum(if(side = 'sell', amt, 0)) c2c_sell
-                    from {C2C.__tablename__}
-                ) src
+                    ,sum(amt) deposit
+                    ,0 withdraw
+                    ,0 c2c_buy
+                    ,0 c2c_sell
+                from {DepositHistory.__tablename__} dh
+                where state = 2
                 group by ccy
-            ) src
-            left join (
+                union all
                 select 
-                    regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
-                    ,mark_px
-                from {MarkPrice.__tablename__} 
-                where inst_type = 'MARGIN'
-                    and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
-            ) mp on src.ccy = mp.ccy
-            '''
+                    ccy
+                    ,0 deposit
+                    ,sum(amt) withdraw
+                    ,0 c2c_buy
+                    ,0 c2c_sell
+                from {WithdrawHistory.__tablename__} wh
+                where state = 2
+                group by ccy
+                union all
+                select 
+                    'USDT' ccy
+                    ,0 deposit
+                    ,0 withdraw
+                    ,sum(if(side = 'buy', amt, 0)) c2c_buy
+                    ,sum(if(side = 'sell', amt, 0)) c2c_sell
+                from {C2C.__tablename__}
+            ) src
+            group by ccy
+        ) src
+        left join (
+            select 
+                regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
+                ,mark_px
+            from {MarkPrice.__tablename__}
+            where inst_type = 'MARGIN'
+                and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
+        ) mp on src.ccy = mp.ccy
+        '''
         cost = QueryRepository.fetch_df_dat(sql)
 
         sql = f'''
@@ -172,12 +169,12 @@ class CryptoReportService(ReportService):
         margin_flow = QueryRepository.fetch_df_dat(sql)
 
         sql = f'''
-            select 
-                ccy
-                ,margin 
-            from {Positions.__tablename__} 
-            where inst_type = 'SWAP'
-            '''
+        select 
+            ccy
+            ,margin 
+        from {Positions.__tablename__} 
+        where inst_type = 'SWAP'
+        '''
         contract_flow = QueryRepository.fetch_df_dat(sql)
 
         sql = f'''
@@ -191,6 +188,7 @@ class CryptoReportService(ReportService):
 
         equity = spot_asset.value.sum()
         nav = equity + derivative_asset.value.sum()
+        pnl = equity - (cost.cost_usdt.sum() + cost.profit_usdt.sum() - cost.loss_usdt.sum())
 
         asset_format = pd.concat([spot_asset, derivative_asset]).groupby('ccy').sum().reset_index().sort_values('value', ascending=False)
         asset_format['amt'] = asset_format['amt'].apply(lambda x: self.format_number(x, 6))
@@ -201,9 +199,9 @@ class CryptoReportService(ReportService):
             'equity': self.format_number(equity, 2),
             'nav': self.format_number(nav, 2),
             'lever': self.format_number(nav / equity, 2),
-            'rpnl': self.format_number(equity - cost.amt_usdt.sum() - upl.upl_usdt.sum(), 2),
+            'rpnl': self.format_number(pnl - upl.upl_usdt.sum(), 2),
             'upl': self.format_number(upl.upl_usdt.sum(), 2),
-            'pnl': self.format_number(equity - cost.amt_usdt.sum(), 2),
+            'pnl': self.format_number(pnl, 2),
             'contract_flow': self.format_number(contract_flow.margin.sum(), 2),
             'margin_flow': self.format_number(margin_flow.imr_usdt.sum(), 2),
             'free_flow': self.format_number(equity - contract_flow.margin.sum() - margin_flow.imr_usdt.sum(), 2),
