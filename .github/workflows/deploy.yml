@@ -34,5 +34,5 @@ jobs:
             cp /root/config.yml /srv/feishu/config.yml
             conda activate feishu
             conda env update --file environment.yml --prune
-            pkill -f "run.py" > /dev/null 2>&1
+            pkill -f "run.py" > /dev/null 2>&1 || true
             python3 run.py
