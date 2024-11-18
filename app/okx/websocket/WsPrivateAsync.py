@@ -11,6 +11,7 @@ logger = logging.getLogger("WsPrivate")
 
 class WsPrivateAsync:
     def __init__(self, apiKey, passphrase, secretKey, url, useServerTime):
+        self.websocket = None
         self.url = url
         self.subscriptions = set()
         self.callback = None

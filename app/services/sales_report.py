@@ -24,8 +24,8 @@ class SalesReportService(ReportService):
             ,sum(if(date(datetime) between current_date - interval weekday(current_date - interval 1 day) + 1 day and current_date - interval 1 day, 1, 0)) customers_wtd
             ,sum(if(date(datetime) between date_format(current_date - interval 1 day, '%Y-%m-01') and current_date - interval 1 day, total_amount, 0)) revenue_mtd
             ,sum(if(date(datetime) between date_format(current_date - interval 1 day, '%Y-%m-01') and current_date - interval 1 day, 1, 0)) customers_mtd
-            ,sum(if(date(datetime) between current_date - interval weekday(current_date - interval 1 day) + 7 day and current_date - interval weekday(current_date) day, total_amount, 0)) revenue_pre_week
-            ,sum(if(date(datetime) between current_date - interval weekday(current_date - interval 1 day) + 7 day and current_date - interval weekday(current_date) day, 1, 0)) customers_pre_week
+            ,sum(if(date(datetime) between current_date - interval weekday(current_date - interval 1 day) + 8 day and current_date - interval weekday(current_date - interval 1 day) + 2 day, total_amount, 0)) revenue_pre_week
+            ,sum(if(date(datetime) between current_date - interval weekday(current_date - interval 1 day) + 8 day and current_date - interval weekday(current_date - interval 1 day) + 2 day, 1, 0)) customers_pre_week
             ,sum(if(date(datetime) between date_format(current_date - interval day(current_date - interval 1 day) + 1 day, '%Y-%m-01') and date_format(current_date - interval 1 day, '%Y-%m-01') - interval 1 day, total_amount, 0)) revenue_pre_month
             ,sum(if(date(datetime) between date_format(current_date - interval day(current_date - interval 1 day) + 1 day, '%Y-%m-01') and date_format(current_date - interval 1 day, '%Y-%m-01') - interval 1 day, 1, 0)) customers_pre_month
         from {Tickets.__tablename__}

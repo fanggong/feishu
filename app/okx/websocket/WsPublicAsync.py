@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import websockets
 
 from app.okx.websocket.WebSocketFactory import WebSocketFactory
 
@@ -10,6 +11,7 @@ logger = logging.getLogger("WsPublic")
 
 class WsPublicAsync:
     def __init__(self, url):
+        self.websocket = None
         self.url = url
         self.subscriptions = set()
         self.callback = None
@@ -20,10 +22,17 @@ class WsPublicAsync:
         self.websocket = await self.factory.connect()
 
     async def consume(self):
-        async for message in self.websocket:
-            logger.info("Received message: {%s}", message)
-            if self.callback:
-                self.callback(message)
+        try:
+            async for message in self.websocket:
+                logger.info("Received message: {%s}", message)
+                if self.callback:
+                    self.callback(message)
+        except websockets.exceptions.ConnectionClosedError:
+            await self.stop()
+            # await self.stop()
+            # await asyncio.sleep(2)
+            # await self.start()
+
 
     async def subscribe(self, params: list, callback):
         self.callback = callback
@@ -32,7 +41,6 @@ class WsPublicAsync:
             "args": params
         })
         await self.websocket.send(payload)
-        # await self.consume()
 
     async def unsubscribe(self, params: list, callback):
         self.callback = callback
