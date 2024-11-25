@@ -196,7 +196,7 @@ fabric.properties
 result/
 .DS_Store
 
-tmp*.py
+sample.py
 
 data/*
 

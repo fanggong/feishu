@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class YinbaoClient(Client):
 
     def __init__(self, app_id, app_key, base_url=c.API_URL, proxy=None):
