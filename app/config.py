@@ -23,7 +23,15 @@ class Config:
             config = cls.load_config()['okx']
         else:
             raise ValueError('Not A Valid key_type')
-        return {
+        if 'proxy' in config.keys():
+            return {
+            'api_key': config['api_key'],
+            'api_secret_key': config['secret_key'],
+            'passphrase': config['passphrase'],
+            'proxy': config['proxy']
+        }
+        else:
+            return {
             'api_key': config['api_key'],
             'api_secret_key': config['secret_key'],
             'passphrase': config['passphrase']
@@ -32,7 +40,10 @@ class Config:
     @classmethod
     def get_yinbao_keys(cls):
         config = cls.load_config()['yinbao']
-        return {'app_id': config['app_id'], 'app_key': config['app_key']}
+        if 'proxy' in config.keys():
+            return {'app_id': config['app_id'], 'app_key': config['app_key'], 'proxy': config['proxy']}
+        else:
+            return {'app_id': config['app_id'], 'app_key': config['app_key']}
 
     @classmethod
     def get_crypto_robot(cls):

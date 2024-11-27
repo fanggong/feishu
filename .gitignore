@@ -203,3 +203,5 @@ data/*
 config.yml
 
 app/strategy/*
+
+tmp*

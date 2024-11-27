@@ -4,8 +4,8 @@ from . import const as c
 
 class StoreApi(YinbaoClient):
 
-    def __init__(self, app_id, app_key):
-        super().__init__(app_id, app_key)
+    def __init__(self, app_id, app_key, proxy=None):
+        super().__init__(app_id, app_key, proxy=proxy)
 
     def get_store_list(self):
         params = {
