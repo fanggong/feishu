@@ -14,24 +14,24 @@ class CryptoReportService(ReportService):
     def report(self):
         logger.info(f'SERVICE IS RUNNING...')
         sql = f'''
+        select 
+            src.ccy ccy
+            ,eq amt
+            ,eq * coalesce(mark_px, 1) value
+        from (
+            select ccy, eq  
+            from {Balance.__tablename__} 
+        ) src
+        left join (
             select 
-                src.ccy ccy
-                ,eq amt
-                ,eq * coalesce(mark_px, 1) value
-            from (
-                select ccy, eq  
-                from {Balance.__tablename__} 
-            ) src
-            left join (
-                select 
-                    regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
-                    ,mark_px
-                from {MarkPrice.__tablename__} 
-                where inst_type = 'MARGIN'
-                    and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
-            ) mp on src.ccy = mp.ccy
-            order by value desc
-            '''
+                regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
+                ,mark_px
+            from {MarkPrice.__tablename__} 
+            where inst_type = 'MARGIN'
+                and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
+        ) mp on src.ccy = mp.ccy
+        order by value desc
+        '''
         spot_asset = QueryRepository.fetch_df_dat(sql)
 
         sql = f'''
@@ -189,8 +189,10 @@ class CryptoReportService(ReportService):
         pnl = equity - cost.cost_usdt.sum()
 
         asset_format = pd.concat([spot_asset, derivative_asset]).groupby('ccy').sum().reset_index().sort_values('value', ascending=False)
+        asset_format['percent'] = asset_format.value / asset_format.value.sum() * 100
         asset_format['amt'] = asset_format['amt'].apply(lambda x: self.format_number(x, 6))
         asset_format['value'] = asset_format['value'].apply(lambda x: self.format_number(x, 6))
+        asset_format['percent'] = asset_format['percent'].apply(lambda x: self.format_number(x, 2))
         asset_format = asset_format.to_dict(orient='records')
 
         res = {

@@ -59,3 +59,8 @@ class Config:
     def get_user_id(cls, name):
         config = cls.load_config()['feishu_user_id']
         return config[name]
+
+    @classmethod
+    def get_ws_public_url(cls):
+        config = cls.load_config()['okx_websocket']
+        return config['public']

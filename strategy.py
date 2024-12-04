@@ -1,5 +1,6 @@
 import logging
 import time
+from distutils.command.install_data import install_data
 
 logging.basicConfig(
     level=logging.INFO,
@@ -18,8 +19,5 @@ pd.set_option('display.max_columns', None)
 
 if __name__ == '__main__':
     trade_service = TradeService(key_type='main')
-    strategy = BollStrategy(
-        ws_public_url='wss://ws.okx.com:8443/ws/v5/business', trade_service=trade_service,
-        channel='candle5m', instId='WLD-USDT-SWAP'
-    )
-    strategy.run(bar='5m')
+    strategy = BollStrategy(trade_service=trade_service, inst_id='BTC-USDT-SWAP', short_term='5m', long_term='1H')
+    strategy.run()
