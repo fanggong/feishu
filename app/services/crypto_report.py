@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class CryptoReportService(ReportService):
     id = 'AAq7F02QhXIfo'
-    version_name = '1.0.11'
+    version_name = '1.0.12'
 
     def report(self):
         logger.info(f'SERVICE IS RUNNING...')
