@@ -16,6 +16,7 @@ async def event():
         'risk_report': handle_risk_report
     }
     if tasks.get(data['event']['event_key']):
-        asyncio.create_task(run_in_back(tasks.get(data['event']['event_key'])))
+        # asyncio.create_task(run_in_back(tasks.get(data['event']['event_key'])))
+        asyncio.create_task(tasks.get(data['event']['event_key']))
 
     return jsonify({'message': 'Event received'}), 200
