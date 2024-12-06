@@ -15,7 +15,8 @@ async def event():
         'sales_report': handle_sales_report
     }
     if tasks.get(data['event']['event_key']):
-        asyncio.create_task(run_in_back(tasks.get(data['event']['event_key'])))
+        task = asyncio.create_task(run_in_back(tasks.get(data['event']['event_key'])))
+        task.add_done_callback(lambda t: t.exception())
 
     return jsonify({'message': 'Event received'}), 200
 
@@ -36,6 +37,7 @@ async def webhook():
 
     task = tasks.get(value)
     if task:
-        asyncio.create_task(run_in_back(task[0], **task[1]))
+        new_mission = asyncio.create_task(run_in_back(task[0], **task[1]))
+        new_mission.add_done_callback(lambda t: t.exception())
 
     return jsonify({}), 200
