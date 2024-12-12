@@ -38,7 +38,7 @@ class CryptoReportService(ReportService):
         select 
             src.ccy ccy
             ,pos * coalesce(ct_val, 1) amt
-            ,pos * coalesce(ct_val, 1) * mark_px - if(src.inst_type = 'SWAP', upl, 0) value
+            ,pos * coalesce(ct_val, 1) * mark_px value
         from (
             select
                 regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
@@ -65,7 +65,13 @@ class CryptoReportService(ReportService):
             where inst_type = 'MARGIN'
                 and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
         ) mp on src.ccy = mp.ccy
-        order by value desc
+        union all
+        select 
+            'USDT' ccy
+            ,-sum(upl) amt
+            ,-sum(upl) value
+        from {Positions.__tablename__}
+        where inst_type = 'SWAP'
         '''
         derivative_asset = QueryRepository.fetch_df_dat(sql)
 
