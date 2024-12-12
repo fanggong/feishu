@@ -45,6 +45,9 @@ class CryptoReportService(ReportService):
                 ,inst_id 
                 ,inst_type
                 ,pos
+                ,realized_pnl
+                ,upl
+                ,pnl
             from {Positions.__tablename__}
         ) src
         left join (
