@@ -35,35 +35,35 @@ class CryptoReportService(ReportService):
         spot_asset = QueryRepository.fetch_df_dat(sql)
 
         sql = f'''
+        select 
+            src.ccy ccy
+            ,pos * coalesce(ct_val, 1) amt
+            ,pos * coalesce(ct_val, 1) * mark_px - if(src.inst_type = 'SWAP', upl, 0) value
+        from (
+            select
+                regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
+                ,inst_id 
+                ,inst_type
+                ,pos
+            from {Positions.__tablename__}
+        ) src
+        left join (
             select 
-                src.ccy ccy
-                ,pos * coalesce(ct_val, 1) amt
-                ,pos * coalesce(ct_val, 1) * mark_px value
-            from (
-                select
-                    regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
-                    ,inst_id 
-                    ,inst_type
-                    ,pos
-                from {Positions.__tablename__}
-            ) src
-            left join (
-                select 
-                    inst_id
-                    ,inst_type
-                    ,ct_val
-                from {Instruments.__tablename__} 
-            ) ins on src.inst_id = ins.inst_id and src.inst_type = ins.inst_type
-            left join (
-                select 
-                    regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
-                    ,mark_px
-                from {MarkPrice.__tablename__} 
-                where inst_type = 'MARGIN'
-                    and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
-            ) mp on src.ccy = mp.ccy
-            order by value desc
-            '''
+                inst_id
+                ,inst_type
+                ,ct_val
+            from {Instruments.__tablename__} 
+        ) ins on src.inst_id = ins.inst_id and src.inst_type = ins.inst_type
+        left join (
+            select 
+                regexp_substr(inst_id, '[A-Z]+', 1, 1) ccy
+                ,mark_px
+            from {MarkPrice.__tablename__} 
+            where inst_type = 'MARGIN'
+                and regexp_substr(inst_id, '[A-Z]+', 1, 2) = 'USDT'
+        ) mp on src.ccy = mp.ccy
+        order by value desc
+        '''
         derivative_asset = QueryRepository.fetch_df_dat(sql)
 
         sql = f'''

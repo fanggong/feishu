@@ -6,7 +6,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='[%(levelname)s][%(asctime)s][%(name)s] %(message)s',
     handlers=[
-        logging.FileHandler("output.log"),  # 将日志输出到 output.log 文件
+        # logging.FileHandler("output.log"),  # 将日志输出到 output.log 文件
         logging.StreamHandler()  # 同时输出到控制台
     ]
 )
