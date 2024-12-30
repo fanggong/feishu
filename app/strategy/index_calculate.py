@@ -1,3 +1,4 @@
+import pandas as pd
 from ta.trend import sma_indicator, macd, macd_signal
 from ta.momentum import rsi
 from ta.volatility import BollingerBands
@@ -31,3 +32,4 @@ def boll_band(df):
     df.loc[:, c.BOLL_DOWN] = boll.bollinger_lband()
     df.loc[:, c.BOLL] = boll.bollinger_mavg()
     return df
+

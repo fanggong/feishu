@@ -22,5 +22,5 @@ pd.set_option('display.max_columns', None)
 if __name__ == '__main__':
     trade_service = TradeService(key_type='main')
     # strategy = MaStrategy(trade_service=trade_service, inst_id='ETH-USDT-SWAP', terms=['5m', '15m', '1H'], period=5)
-    strategy = BollStrategy(trade_service=trade_service, inst_id='ETH-USDT-SWAP', terms=['5m', '15m', '1H', '4H'], period=5)
+    strategy = BollStrategy(trade_service=trade_service, inst_id='WLD-USDT', terms=['5m', '15m', '1H', '4H', '1D'], period=5)
     strategy.run()

@@ -123,7 +123,7 @@ class Strategy(ABC):
             signal_dict = {1: 'long', 0: 'inoperation', -1: 'short'}
             signal = signal_dict[signal]
             end = time.perf_counter()
-            logger.info(f'操作:{signal.ljust(12)}  当前价格:{self.ws_latest_candle[4].ljust(12)}  运行时间:{end - start} s')
+            logger.info(f'handle:{signal.ljust(12)}  value:{self.ws_latest_candle[4].ljust(12)}  run time:{end - start} s')
 
     def kline_thread(self):
         """
@@ -140,7 +140,7 @@ class Strategy(ABC):
             ),
             dcc.Interval(
                 id='interval-update',
-                interval=10 * 1000,  # 每10秒触发一次（单位：毫秒）
+                interval=self.period * 1000,  # 每10秒触发一次（单位：毫秒）
                 n_intervals=0
             )
         ])
