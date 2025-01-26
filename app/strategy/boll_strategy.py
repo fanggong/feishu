@@ -20,8 +20,29 @@ class BollStrategy(Strategy):
         df = boll_band(df)
         return df
 
+    @staticmethod
+    def find_inflection_point(l):
+        l = l.tolist()
+        # max_index = l.index(max(l))
+        min_index = l.index(min(l))
+        return min_index
+
+    def signal_dict(self):
+        return {
+            0: 'inoperation'
+        }
+
     def order_signal(self):
         for i in range(len(self.terms)):
-            tmp = self.candles[str({'channel': f'{self.channel_prefix}{self.terms[i]}', 'instId': self.inst_id})]
-            tmp = self.calculate_indicators(tmp)
+            candle: pd.DataFrame = self.candles[str({'channel': f'{self.channel_prefix}{self.terms[i]}', 'instId': self.inst_id})]
+            candle = self.calculate_indicators(candle)
+            candle = candle.dropna()
+            # inflection_index = self.find_inflection_point(candle[c.BOLL])
+            #
+            # before = candle[c.BOLL].iloc[0:(inflection_index+1)]
+            # after = candle[c.BOLL].iloc[inflection_index:]
+            #
+            # if before < 15 or after < 15:
+            #     pass
+
         return 0

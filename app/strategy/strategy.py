@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from tenacity import retry_unless_exception_type
+
 from app.services.candles_fetcher import CandlesFetcher
 from app.okx.websocket.WsPublicAsync import WsPublicAsync
 from app.services.trade import TradeService
@@ -53,6 +55,10 @@ class Strategy(ABC):
     def order_signal(self):
         pass
 
+    @abstractmethod
+    def signal_dict(self):
+        return {}
+
     def strategy_init(self):
         """
         策略初始化，获取历史K线数据
@@ -62,7 +68,6 @@ class Strategy(ABC):
             term_key = {'channel': f'{self.channel_prefix}{term}', 'instId': self.inst_id}
             self.candles[str(term_key)] = candle_fetcher.fetch_data(instId=self.inst_id, bar=term)
             self.candles[str(term_key)] = self.calculate_indicators(self.candles[str(term_key)])
-
 
     async def handle_websocket(self, args):
         """
@@ -120,10 +125,9 @@ class Strategy(ABC):
                 else:
                     self.candles[arg] = update_last_row(self.candles[arg], dat)
             signal = self.order_signal()
-            signal_dict = {1: 'long', 0: 'inoperation', -1: 'short'}
-            signal = signal_dict[signal]
+            signal = self.signal_dict()[signal]
             end = time.perf_counter()
-            logger.info(f'handle:{signal.ljust(12)}  value:{self.ws_latest_candle[4].ljust(12)}  run time:{end - start} s')
+            logger.info(f'handle:{signal.ljust(50)}  value:{self.ws_latest_candle[4].ljust(12)}  run time:{end - start} s')
 
     def kline_thread(self):
         """
@@ -177,7 +181,7 @@ class Strategy(ABC):
                 thread_ws.join()
                 thread_cal.join()
                 thread_kline.join()
-                break
+
             except Exception as e:
                 logger.info(f'发生错误，正在重新启动连接：{e}')
                 time.sleep(5)

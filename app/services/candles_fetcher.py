@@ -13,6 +13,7 @@ class CandlesFetcher(DataFetcher):
         logger.info(f'{kwargs} SERVICE IS RUNNING...')
         market_api = MarketAPI(**Config.get_okx_keys(), debug=False)
         dat = market_api.get_mark_price_candlesticks(instId=instId, **kwargs)
+        # dat = market_api.get_index_candlesticks(instId=instId, **kwargs)
         if dat['code'] == '0':
             dat = dat['data']
             dat = self.process_data(dat)

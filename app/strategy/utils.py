@@ -1,6 +1,7 @@
 import pandas as pd
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
+
 from .const import *
 
 
@@ -28,7 +29,8 @@ def generate_kline_figure(candles, indexes):
     fig = make_subplots(
         rows=num_subplots, cols=2, shared_xaxes=False,
         vertical_spacing=0.3 / num_subplots, horizontal_spacing=0.03, column_widths=[0.7, 0.3],
-        specs=[[{'type': 'scatter'}, {'type': 'table'}]] * num_subplots
+        specs=[[{'type': 'scatter'}, {'type': 'table'}]] * num_subplots,
+        subplot_titles=[item for sublist in zip(candles.keys(), [''] * num_subplots) for item in sublist]
     )
 
     # 为每个子图添加一个K线图
@@ -51,7 +53,7 @@ def generate_kline_figure(candles, indexes):
                 f"LOW: {row['low']}<br>"
                 f"CLOSE: {row['close']}"
                 for _, row in df.iterrows()
-            ],
+            ]
         ), row=i + 1, col=1)
 
         # 添加指标曲线
@@ -97,6 +99,7 @@ def generate_kline_figure(candles, indexes):
             title_text='Price',
             row=i + 1, col=1
         )
+
 
     # 更新布局
     fig.update_layout(
