@@ -30,8 +30,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            conda env update -f /srv/feishu/environment.yml
+            # conda env update -f /srv/feishu/environment.yml
             cp /root/config.yml /srv/feishu/config.yml
             cd /srv/feishu
-            chmod +x deploy.sh
-            ./deploy.sh
+            # chmod +x deploy.sh
+            # ./deploy.sh
