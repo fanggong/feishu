@@ -30,8 +30,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            # pip3 install -r .\requirements.txt
+            conda activate feishu
+            pip3 install -r .\requirements.txt
             cp /root/config.yml /srv/feishu/config.yml
             cd /srv/feishu
-            # chmod +x deploy.sh
-            # ./deploy.sh
+            chmod +x deploy.sh
+            ./deploy.sh
