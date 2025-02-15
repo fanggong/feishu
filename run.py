@@ -1,5 +1,5 @@
 from app.main import app
-import scheduler
+# import scheduler
 import logging
 
 logging.basicConfig(
