@@ -10,7 +10,6 @@ bp = Blueprint('crypto', __name__)
 @bp.route('/event', methods=['POST'])
 async def event():
     data = await request.get_json()
-    print(data)
     # tasks = {
     #     'crypto_update': handle_crypto_update,
     #     'crypto_report': handle_crypto_report,
@@ -20,4 +19,10 @@ async def event():
     #     task = asyncio.create_task(run_in_back(tasks.get(data['event']['event_key'])))
     #     task.add_done_callback(lambda t: t.exception())
     # return jsonify({'message': 'Event received'}), 200
+    return jsonify({'challenge': data.get('challenge')})
+
+
+@bp.route('/webhook', methods=['POSTZ'])
+async def webhook():
+    data = await request.get_json()
     return jsonify({'challenge': data.get('challenge')})
