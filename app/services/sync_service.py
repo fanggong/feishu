@@ -38,22 +38,23 @@ class SyncService:
     def update_table(table_class, strategy: UpdateStrategy, **kwargs):
         data_fetcher = SyncService.get_data_fetcher(table_class)
         data_list = data_fetcher.fetch_data(**kwargs)
-        logger.info(f'Data for table {table_class.__tablename__} GETODAZE!!!')
 
         if not data_list:
             logger.info('No data to update for table:', table_class.__tablename__)
             return
 
-        logger.info(f'{strategy} update table {table_class.__tablename__}')
-        try:
-            if strategy == UpdateStrategy.FULL:
-                UpdateRepository.full_update(table_class, data_list)
-            elif strategy == UpdateStrategy.INCREMENTAL:
-                UpdateRepository.incremental_update(table_class, data_list)
-            LogService.record_update_logs(table_class, 1)
-        except Exception as e:
-            LogService.record_update_logs(table_class, 0, str(e))
-            raise e
+        else:
+            logger.info(f'Data for table {table_class.__tablename__} GETODAZE!!!')
+            logger.info(f'{strategy} update table {table_class.__tablename__}')
+            try:
+                if strategy == UpdateStrategy.FULL:
+                    UpdateRepository.full_update(table_class, data_list)
+                elif strategy == UpdateStrategy.INCREMENTAL:
+                    UpdateRepository.incremental_update(table_class, data_list)
+                LogService.record_update_logs(table_class, 1)
+            except Exception as e:
+                LogService.record_update_logs(table_class, 0, str(e))
+                raise e
 
     @staticmethod
     def update_multiple_table(table_class, strategy, **kwargs):
