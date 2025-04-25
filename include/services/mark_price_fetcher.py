@@ -1,14 +1,11 @@
-from app.services.data_fetcher import DataFetcher
-from app.okx.PublicData import PublicAPI
-from app.config import Config
-from app.utils.decorators import retry
+from include.services.data_fetcher import DataFetcher
+from include.okx.PublicData import PublicAPI
 import logging
 
 logger = logging.getLogger(__name__)
 
 
 class MarkPriceFetcher(DataFetcher):
-    @retry(max_retries=5, delay=1)
     def fetch_data(self, instType, **kwargs):
         logger.info(f'SERVICE IS RUNNING...')
         dat = PublicAPI(**Config.get_okx_keys(), flag='0').get_mark_price(instType, **kwargs)

@@ -1,15 +1,18 @@
-from app.services.data_fetcher import DataFetcher
-from app.okx.Account import AccountAPI
-from app.config import Config
+from include.services.data_fetcher import DataFetcher
+from include.okx.Account import AccountAPI
 import time
-from app.utils.decorators import retry
 import logging
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
 
 class BillsHistoryFetcher(DataFetcher):
-    @retry(max_retries=5, delay=1)
+    def __init__(self, api_key, api_secret_key, passphrase):
+        self.api_key = api_key
+        self.api_secret_key = api_secret_key
+        self.passphrase = passphrase
+
     def fetch_data(self, **kwargs):
         logger.info(f'SERVICE IS RUNNING...')
         dat = self._get_bills_history(**kwargs)
@@ -61,7 +64,8 @@ class BillsHistoryFetcher(DataFetcher):
             if len(dat) == 0:
                 return dat
             else:
-                kwargs['before'] = dat[0]['billId']
+                logger.info(f"{len(dat)} Data from {datetime.fromtimestamp(int(dat[-1]['ts'])/1000)} to {datetime.fromtimestamp(int(dat[0]['ts'])/1000)}")
+                kwargs['after'] = dat[-1]['billId']
                 dat = dat + self._get_bills_history(**kwargs)
                 return dat
         else:

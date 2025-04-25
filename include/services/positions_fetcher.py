@@ -1,14 +1,11 @@
-from app.services.data_fetcher import DataFetcher
-from app.okx.Account import AccountAPI
-from app.config import Config
-from app.utils.decorators import retry
+from include.services.data_fetcher import DataFetcher
+from include.okx.Account import AccountAPI
 import logging
 
 logger = logging.getLogger(__name__)
 
 
 class PositionsFetcher(DataFetcher):
-    @retry(max_retries=5, delay=1)
     def fetch_data(self, **kwargs):
         logger.info(f'SERVICE IS RUNNING...')
         dat = AccountAPI(**Config.get_okx_keys(), flag='0').get_positions(**kwargs)

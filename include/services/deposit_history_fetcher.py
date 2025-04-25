@@ -1,46 +1,40 @@
-from app.services.data_fetcher import DataFetcher
-from app.okx.Funding import FundingAPI
-from app.config import Config
+from include.services.data_fetcher import DataFetcher
+from include.okx.Funding import FundingAPI
 import time
-from app.utils.decorators import retry
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class WithdrawHistoryFetcher(DataFetcher):
-    @retry(max_retries=5, delay=1)
+class DepositHistoryFetcher(DataFetcher):
     def fetch_data(self, **kwargs):
         logger.info(f'SERVICE IS RUNNING...')
-        dat = self._get_withdraw_history(**kwargs)
+        dat = self._get_deposit_history(**kwargs)
         dat = [self.process_data(item) for item in dat]
         return dat
 
     def process_data(self, item):
         key_mapping = {
-            'chain': 'chain',
-            'areaCodeFrom': 'area_code_from',
-            'clientId': 'client_id',
-            'fee': 'fee',
+            'actualDepBlkConfirm': 'actual_dep_blk_confirm',
             'amt': 'amt',
-            'txId': 'tx_id',
-            'areaCodeTo': 'area_code_to',
+            'areaCodeFrom': 'area_code_from',
             'ccy': 'ccy',
+            'chain': 'chain',
+            'depId': 'dep_id',
             'from': 'from',
-            'to': 'to',
+            'fromWdId': 'from_wd_id',
             'state': 'state',
-            'nonTradableAsset': 'non_tradable_asset',
+            'to': 'to',
             'ts': 'ts',
-            'wdId': 'wd_id',
-            'feeCcy': 'fee_ccy'
+            'txId': 'tx_id'
         }
         item['ts'] = self.from_timestamp(item['ts'])
         processed_item = self.process_keys(item, key_mapping)
         return processed_item
 
-    def _get_withdraw_history(self, **kwargs):
+    def _get_deposit_history(self, **kwargs):
         funding_api = FundingAPI(**Config.get_okx_keys(), flag='0')
-        dat = funding_api.get_withdrawal_history(**kwargs)
+        dat = funding_api.get_deposit_history(**kwargs)
         if dat['code'] == '0':
             dat = dat.get('data')
             time.sleep(0.2)
@@ -48,7 +42,7 @@ class WithdrawHistoryFetcher(DataFetcher):
                 return dat
             else:
                 kwargs['after'] = dat[-1]['ts']
-                dat = dat + self._get_withdraw_history(**kwargs)
+                dat = dat + self._get_deposit_history(**kwargs)
                 return dat
         else:
             return []

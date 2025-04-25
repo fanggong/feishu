@@ -1,10 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
-from app.config import Config
+from airflow.hooks.base import BaseHook
 
 
-DATABASE_URL = Config.get_mysql_url()
+config = BaseHook.get_connection('mysql_tc')
+DATABASE_URL = f'mysql+pymysql://{config.login}:{config.password}@{config.host}:{config.port}/{config.schema}'
 engine = create_engine(
     DATABASE_URL, echo=False, pool_size=10, max_overflow=20, pool_timeout=30, pool_recycle=3600,
     connect_args={'connect_timeout': 10}
