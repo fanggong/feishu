@@ -6,9 +6,18 @@ logger = logging.getLogger(__name__)
 
 
 class PositionsFetcher(DataFetcher):
+    def __init__(self, api_key, api_secret_key, passphrase, proxy=None):
+        self.api_key = api_key
+        self.api_secret_key = api_secret_key
+        self.passphrase = passphrase
+        self.proxy = proxy
+
     def fetch_data(self, **kwargs):
         logger.info(f'SERVICE IS RUNNING...')
-        dat = AccountAPI(**Config.get_okx_keys(), flag='0').get_positions(**kwargs)
+        dat = AccountAPI(
+            api_key=self.api_key, api_secret_key=self.api_secret_key,
+            passphrase=self.passphrase, proxy=self.proxy, flag='0'
+        ).get_positions(**kwargs)
         if dat['code'] == '0':
             dat = dat['data']
             dat = [self.process_data(item) for item in dat]

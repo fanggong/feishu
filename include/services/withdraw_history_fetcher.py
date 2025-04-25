@@ -7,8 +7,14 @@ logger = logging.getLogger(__name__)
 
 
 class WithdrawHistoryFetcher(DataFetcher):
+    def __init__(self, api_key, api_secret_key, passphrase, proxy=None):
+        self.api_key = api_key
+        self.api_secret_key = api_secret_key
+        self.passphrase = passphrase
+        self.proxy = proxy
+
     def fetch_data(self, **kwargs):
-        logger.info(f'SERVICE IS RUNNING...')
+        logger.info(f'获取数据 Withdraw History')
         dat = self._get_withdraw_history(**kwargs)
         dat = [self.process_data(item) for item in dat]
         return dat
@@ -23,8 +29,8 @@ class WithdrawHistoryFetcher(DataFetcher):
             'txId': 'tx_id',
             'areaCodeTo': 'area_code_to',
             'ccy': 'ccy',
-            'from': 'from',
-            'to': 'to',
+            'from': 'from_s',
+            'to': 'to_s',
             'state': 'state',
             'nonTradableAsset': 'non_tradable_asset',
             'ts': 'ts',
@@ -36,7 +42,10 @@ class WithdrawHistoryFetcher(DataFetcher):
         return processed_item
 
     def _get_withdraw_history(self, **kwargs):
-        funding_api = FundingAPI(**Config.get_okx_keys(), flag='0')
+        funding_api = FundingAPI(
+            api_key=self.api_key, api_secret_key=self.api_secret_key,
+            passphrase=self.passphrase, proxy=self.proxy, flag='0'
+        )
         dat = funding_api.get_withdrawal_history(**kwargs)
         if dat['code'] == '0':
             dat = dat.get('data')

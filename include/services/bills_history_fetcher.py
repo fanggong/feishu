@@ -8,19 +8,20 @@ logger = logging.getLogger(__name__)
 
 
 class BillsHistoryFetcher(DataFetcher):
-    def __init__(self, api_key, api_secret_key, passphrase):
+    def __init__(self, api_key, api_secret_key, passphrase, proxy=None):
         self.api_key = api_key
         self.api_secret_key = api_secret_key
         self.passphrase = passphrase
+        self.proxy = proxy
 
     def fetch_data(self, **kwargs):
-        logger.info(f'SERVICE IS RUNNING...')
+        logger.info(f'获取数据 Bills History')
         dat = self._get_bills_history(**kwargs)
         dat = [self.process_data(item) for item in dat]
         return dat
 
     def process_data(self, item):
-        key_mapping = {
+        key_mapping = { 
             'instType': 'inst_type',
             'billId': 'bill_id',
             'subType': 'sub_type',
@@ -56,7 +57,10 @@ class BillsHistoryFetcher(DataFetcher):
         return processed_item
 
     def _get_bills_history(self, **kwargs):
-        account_api = AccountAPI(**Config.get_okx_keys(), flag='0')
+        account_api = AccountAPI(
+            api_key=self.api_key, api_secret_key=self.api_secret_key,
+            passphrase=self.passphrase, proxy=self.proxy, flag='0'
+        )
         dat = account_api.get_account_bills_archive(**kwargs)
         if dat['code'] == '0':
             dat = dat.get('data')

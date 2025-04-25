@@ -13,7 +13,7 @@ class BalanceFetcher(DataFetcher):
         self.proxy = proxy
 
     def fetch_data(self):
-        logger.info(f'SERVICE IS RUNNING...')
+        logger.info(f'获取数据 Balance')
         dat = AccountAPI(
             api_key=self.api_key, api_secret_key=self.api_secret_key,
             passphrase=self.passphrase, proxy=self.proxy, flag='0'

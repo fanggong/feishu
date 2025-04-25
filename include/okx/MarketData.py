@@ -128,8 +128,19 @@ class MarketAPI(OkxClient):
         }
         return self._request_with_params(GET, GET_OPTION_TRADES, params)
 
+    def get_order_book(self, instId='', sz=400):
+        params = {
+            'instId': instId,
+            'sz': sz
+        }
+        return self._request_with_params(GET, GET_ORDER_BOOK, params)
 
-
+    def get_order_books_full(self, instId='', sz=400):
+        params = {
+            'instId': instId,
+            'sz': sz
+        }
+        return self._request_with_params(GET, GET_ORDER_BOOKS_FULL, params)
 
 
 

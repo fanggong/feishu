@@ -104,6 +104,8 @@ BLOCK_TICKER = '/api/v5/market/block-ticker'  # need to add
 BLOCK_TRADES = '/api/v5/market/block-trades'  # need to add
 GET_ORDER_LITE_BOOK = '/api/v5/market/books-lite'
 GET_OPTION_TRADES = '/api/v5/market/option/instrument-family-trades'
+GET_ORDER_BOOK = '/api/v5/market/books'
+GET_ORDER_BOOKS_FULL = '/api/v5/market/books-full'
 
 # Public Data-Complete-testComplete
 INSTRUMENT_INFO = '/api/v5/public/instruments'

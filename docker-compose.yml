@@ -1,7 +1,7 @@
 services:
   airflow-init:
     image: airflow_own
-    container_name: airflow-init
+    container_name: airflow-init-own
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=mysql+mysqldb://root:Bit_20092414@sh-cynosdbmysql-grp-jmhb3loc.sql.tencentcdb.com:22185/airflow
@@ -12,7 +12,7 @@ services:
 
   airflow-webserver:
     image: airflow_own
-    container_name: airflow-webserver
+    container_name: airflow-webserver-own
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=mysql+mysqldb://root:Bit_20092414@sh-cynosdbmysql-grp-jmhb3loc.sql.tencentcdb.com:22185/airflow
@@ -20,7 +20,7 @@ services:
       - AIRFLOW__WEBSERVER__PORT=8080
       - AIRFLOW__CORE__DEFAULT_TIMEZONE=Asia/Shanghai
     ports:
-      - "8080:8080"
+      - "12345:8080"
     volumes:
       - logs:/opt/airflow/logs
     entrypoint: ["bash", "-c", "airflow webserver"]
@@ -30,7 +30,7 @@ services:
 
   airflow-scheduler:
     image: airflow_own
-    container_name: airflow-scheduler
+    container_name: airflow-scheduler-own
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=mysql+mysqldb://root:Bit_20092414@sh-cynosdbmysql-grp-jmhb3loc.sql.tencentcdb.com:22185/airflow
